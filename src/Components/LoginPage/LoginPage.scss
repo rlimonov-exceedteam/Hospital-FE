@@ -1,0 +1,30 @@
+.LoginPage {
+  background: rgba(197, 233, 255, 0.72);
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 117px);
+  
+  .image {
+    width: 31%;
+    margin: 6% 5% 18% 10%;
+
+    @media screen and (max-width: 1110px){
+      display: none;
+    }
+    
+    svg {
+      width: 35vw;
+    }
+  }
+  @media screen and (max-width: 1440px) {
+    .image {
+      width: 31%;
+      margin: 6% 5% 18% 10%;
+      
+      svg {
+        width: 38vw;
+      }
+    }
+  }
+}
+

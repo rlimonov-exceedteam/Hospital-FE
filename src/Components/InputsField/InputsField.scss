@@ -1,0 +1,129 @@
+.InputsField {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  height: 40vw;
+  background-color: white;
+  margin: 3% 5% 10% 5%;
+
+  @media screen and (max-width: 1440px) {
+    height: 43vw;
+  }
+
+  @media screen and (max-width: 1110px) {
+    width: 80%;
+    height: fit-content;
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 42px;
+
+    @media screen and (max-width: 1200px) {
+      font-size: 28px;
+      line-height: 32px;
+      margin-bottom: 12px;
+    }
+
+    @media screen and (max-width: 400px) {
+      font-size: 22px;
+    }
+  }
+
+  label {
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+    margin-bottom: 10px;
+
+    @media screen and (max-width: 1200px) {
+      font-size: 15px;
+      line-height: 17px;
+    }
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    .input {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+  }
+
+  .btns {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    button {
+      margin-top: 13px;
+      padding: 10px 0 10px 0;
+      width: 60%;
+      align-self: flex-end;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 21px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+
+      @media screen and (max-width: 1200px) {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 17px;
+      }
+
+      @media screen and (max-width: 1110px) {
+        margin-top: 14px;
+        font-size: 16px;
+        line-height: 17px;
+      }
+
+      @media screen and (max-width: 430px) {
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: 370px) {
+        font-size: 12px;
+      }
+    }
+  
+    p {
+      font-weight: 100;
+      font-size: 18px;
+      line-height: 21px;
+      text-align: right;
+      margin-top: 13px;
+      cursor: pointer;
+
+      @media screen and (max-width: 1200px) {
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 17px;
+      }
+
+      @media screen and (max-width: 1110px) {
+        margin: 18px 0 18px 0;
+        font-size: 16px;
+        line-height: 17px;
+      }
+
+      @media screen and (max-width: 430px) {
+        margin: 12px 0 12px 0;
+        font-size: 14px;
+      }
+
+      @media screen and (max-width: 370px) {
+        font-size: 12px;
+      }
+    }
+  }
+}

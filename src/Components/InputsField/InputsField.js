@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
 
-const InputsField = () => {
+const InputsField = ({ isRegistration }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
@@ -56,59 +56,106 @@ const InputsField = () => {
       }
     });
   }
+
+  
     
   return (
-    <div className="InputsField">
-      <p>Зарегистрироваться</p>
-      <form>
-        <div className="input">
-          <label>
-            Логин:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            variant="outlined" 
-            value={login}
-            onChange={(e) => setLogin(e.currentTarget.value)}
-          />
+    <>
+      {isRegistration &&
+        <div className="InputsField">
+        <p>Зарегистрироваться</p>
+        <form>
+          <div className="input">
+            <label>
+              Логин:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              variant="outlined" 
+              value={login}
+              onChange={(e) => setLogin(e.currentTarget.value)}
+            />
+          </div>
+          <div className="input">
+            <label>
+              Пароль:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              type="password" 
+              variant="outlined" 
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+          </div>
+          <div className="input">
+            <label>
+              Повторите пароль:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              type="password" 
+              variant="outlined" 
+              value={password2}
+              onChange={(e) => setPassword2(e.currentTarget.value)}
+            />
+          </div>
+        </form>
+        <div className="btns">
+          <button 
+            className="btn"
+            onClick={() => validateAndPost()}
+          >
+            Зарегистрироваться
+          </button>
+          <p>
+            Авторизоваться
+          </p>
         </div>
-        <div className="input">
-          <label>
-            Пароль:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            type="password" 
-            variant="outlined" 
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-        </div>
-        <div className="input">
-          <label>
-            Повторите пароль:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            type="password" 
-            variant="outlined" 
-            value={password2}
-            onChange={(e) => setPassword2(e.currentTarget.value)}
-          />
-        </div>
-      </form>
-      <div className="btns">
-        <button 
-          className="btn"
-          onClick={() => validateAndPost()}
-        >
-          Зарегистрироваться
-        </button>
-        <p>
-          Авторизоваться
-        </p>
       </div>
-    </div>
+      }
+      {!isRegistration && 
+        <div className="InputsField">
+            <p>Зарегистрироваться</p>
+          <form>
+            <div className="input">
+              <label>
+                Логин:
+              </label>
+              <TextField 
+                id="outlined-basic" 
+                variant="outlined" 
+                value={login}
+                onChange={(e) => setLogin(e.currentTarget.value)}
+              />
+            </div>
+            <div className="input">
+              <label>
+                Пароль:
+              </label>
+              <TextField 
+                id="outlined-basic" 
+                type="password" 
+                variant="outlined" 
+                value={password}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+              />
+            </div>
+          </form>
+          <div className="btns2">
+            <button 
+              className="btn"
+              onClick={() => validateAndPost()}
+            >
+              Войти
+            </button>
+            <p>
+              Зарегистрироваться
+            </p>
+          </div>
+        </div>
+      }
+    </>
   )
 }
 

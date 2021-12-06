@@ -4,7 +4,7 @@ import {
   Snackbar,
   Alert
 } from '@mui/material';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
 
@@ -12,45 +12,56 @@ const InputsField = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [alertOpened, setAlertOpened] = useState();
-  const [alertMessage, setAlertMessage] = useState();
+  const [alert, setAlert] = useState();
+  const { opened, alertText } = alert;
+
   const history = useHistory();
 
   const validateAndPost = async () => {
-    const regexLogin = /[A-Za-z0-9]/;
+    const regexLogin = /[A-Za-z0-9]{6,}/;
     const regexPassword = new RegExp("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$");
 
     if (login) {
       if (!regexLogin.test(login)) {
         setLogin('');
-        setAlertMessage('Логин должен содержать только латинские символы и цифры.');
-        setAlertOpened(true);
+        setAlert({
+          text: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
+          opened: true
+        });
         return;
       } 
     } else {
-      setAlertMessage('Введите логин.');
-      setAlertOpened(true);
+      setAlert({
+        text: 'Введите логин.',
+        opened: true
+      });        
       return;
     }
 
     if (password) {
       if (!regexPassword.test(password)) {
         setPassword('');
-        setAlertMessage(`Пароль должен содержать только латинские символы и цифры. 
-        Необходимо наличие минимум 1 заглавной, 1 маленькой буквы и 1 цифры. 
-        Пароль должен содержать не менее 6 символов.'`);
-        setAlertOpened(true);
+        setAlert({
+          text: `Пароль должен содержать только латинские символы и цифры. 
+          Необходимо наличие минимум 1 заглавной, 1 маленькой буквы и 1 цифры. 
+          Пароль должен содержать не менее 6 символов.`,
+          opened: true
+        });
         return;
       } 
     } else {
-      setAlertMessage('Введите пароль');
-      setAlertOpened(true);
+      setAlert({
+        text :'Введите пароль',
+        opened: true
+      });
       return;
     }
 
     if (password !== repeatedPassword) {
-      setAlertMessage('Пароли не совпадают.');
-      setAlertOpened(true);
+      setAlert({
+        text: 'Пароли не совпадают.',
+        opened: true
+      });
       return;
     } 
 
@@ -62,8 +73,10 @@ const InputsField = () => {
         setLogin(result.data.login);
         history.push('/mainPage')
       } else {
-        setAlertMessage(`Ошибка ${result.status}`);
-        setAlertOpened(true);
+        setAlert({
+          text: `Ошибка ${result.status}`,
+          opened: true
+        });
       }
     });
   }
@@ -115,19 +128,25 @@ const InputsField = () => {
         >
           Зарегистрироваться
         </button>
-        <p>
-          Авторизоваться
-        </p>
+        <Link to="/signInPage">
+          <p>
+            Авторизоваться
+          </p>
+        </Link>
         <Snackbar 
-            open={alertOpened} 
+            open={opened} 
             autoHideDuration={6000} 
-            onClose={() => setAlertOpened(false)}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center"
+            }}
+            onClose={() => setAlert({text: '', opened: false})}
         >
           <Alert  
-            severity="success" 
+            severity="error" 
             sx={{ width: '100%' }}
           >
-            {alertMessage}
+            {alertText}
           </Alert>
         </Snackbar>
       </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import InputsField from '../InputsField/InputsField'
-import './LoginPage.scss'
+import InputsField from '../InputsField/InputsField';
+import './LoginPage.scss';
 
 const WelcomePage = () => {
   const [registred, setRegistred] = useState(false);

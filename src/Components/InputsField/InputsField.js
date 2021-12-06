@@ -8,11 +8,11 @@ import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
 
-const InputsField = () => {
+const InputsField = ({ isRegistration }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [alert, setAlert] = useState();
+  const [alert, setAlert] = useState({opened: false, alertText: ''});
   const { opened, alertText } = alert;
 
   const history = useHistory();
@@ -25,14 +25,14 @@ const InputsField = () => {
       if (!regexLogin.test(login)) {
         setLogin('');
         setAlert({
-          text: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
+          alertText: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
           opened: true
         });
         return;
       } 
     } else {
       setAlert({
-        text: 'Введите логин.',
+        alertText: 'Введите логин.',
         opened: true
       });        
       return;
@@ -42,7 +42,7 @@ const InputsField = () => {
       if (!regexPassword.test(password)) {
         setPassword('');
         setAlert({
-          text: `Пароль должен содержать только латинские символы и цифры. 
+          alertText: `Пароль должен содержать только латинские символы и цифры. 
           Необходимо наличие минимум 1 заглавной, 1 маленькой буквы и 1 цифры. 
           Пароль должен содержать не менее 6 символов.`,
           opened: true
@@ -51,7 +51,7 @@ const InputsField = () => {
       } 
     } else {
       setAlert({
-        text :'Введите пароль',
+        alertText:'Введите пароль',
         opened: true
       });
       return;
@@ -59,7 +59,7 @@ const InputsField = () => {
 
     if (password !== repeatedPassword) {
       setAlert({
-        text: 'Пароли не совпадают.',
+        alertText: 'Пароли не совпадают.',
         opened: true
       });
       return;
@@ -71,69 +71,109 @@ const InputsField = () => {
     }).then(result => {
       if (result.statusText === 'OK') {
         setLogin(result.data.login);
-        history.push('/mainPage')
+        history.push('/mainPage');
       } else {
         setAlert({
-          text: `Ошибка ${result.status}`,
+          alertText: `Ошибка ${result.status}`,
           opened: true
         });
       }
+    }).catch(e => {
+      setAlert({
+        alertText: `${e}`,
+        opened: true
+      });
+    });
+  }
+
+  const authorise = async () => {
+    if (!login) {
+      setAlert({
+        alertText: 'Введите логин.',
+        opened: true
+      });        
+      return;
+    }
+
+    if (!password) {
+      setAlert({
+        alertText:'Введите пароль',
+        opened: true
+      });
+      return;
+    }
+
+    await axios.post('http://localhost:8000/authorise', {
+      login,
+      password
+    }).then(result => {
+      if (result.statusText === 'OK') {
+        localStorage.setItem('token', JSON.stringify(result.data.token));
+        history.push('/mainPage');
+      } 
+    }).catch(e => {
+      setAlert({
+        alertText: `${e}`,
+        opened: true
+      });
     });
   }
     
   return (
-    <div className="InputsField">
-      <p>Зарегистрироваться</p>
-      <form>
-        <div className="input">
-          <label>
-            Логин:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            variant="outlined" 
-            value={login}
-            onChange={(e) => setLogin(e.currentTarget.value)}
-          />
-        </div>
-        <div className="input">
-          <label>
-            Пароль:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            type="password" 
-            variant="outlined" 
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-        </div>
-        <div className="input">
-          <label>
-            Повторите пароль:
-          </label>
-          <TextField 
-            id="outlined-basic" 
-            type="password" 
-            variant="outlined" 
-            value={repeatedPassword}
-            onChange={(e) => setRepeatedPassword(e.currentTarget.value)}
-          />
-        </div>
-      </form>
-      <div className="btns">
-        <button 
-          className="btn"
-          onClick={() => validateAndPost()}
-        >
-          Зарегистрироваться
-        </button>
-        <Link to="/signInPage">
-          <p>
-            Авторизоваться
-          </p>
-        </Link>
-        <Snackbar 
+    <>
+      {isRegistration &&
+        <div className="InputsField">
+        <p>Зарегистрироваться</p>
+        <form>
+          <div className="input">
+            <label>
+              Логин:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              variant="outlined" 
+              value={login}
+              onChange={(e) => setLogin(e.currentTarget.value)}
+            />
+          </div>
+          <div className="input">
+            <label>
+              Пароль:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              type="password" 
+              variant="outlined" 
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+          </div>
+          <div className="input">
+            <label>
+              Повторите пароль:
+            </label>
+            <TextField 
+              id="outlined-basic" 
+              type="password" 
+              variant="outlined" 
+              value={repeatedPassword}
+              onChange={(e) => setRepeatedPassword(e.currentTarget.value)}
+            />
+          </div>
+        </form>
+        <div className="btns">
+          <button 
+            className="btn"
+            onClick={() => validateAndPost()}
+          >
+            Зарегистрироваться
+          </button>
+          <Link to="/signInPage">
+            <p>
+              Авторизоваться
+            </p>
+          </Link>
+          <Snackbar 
             open={opened} 
             autoHideDuration={6000} 
             anchorOrigin={{
@@ -141,16 +181,77 @@ const InputsField = () => {
               horizontal: "center"
             }}
             onClose={() => setAlert({text: '', opened: false})}
-        >
-          <Alert  
-            severity="error" 
-            sx={{ width: '100%' }}
           >
-            {alertText}
-          </Alert>
-        </Snackbar>
+            <Alert  
+              severity="error" 
+              sx={{ width: '100%' }}
+            >
+              {alertText}
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
-    </div>
+      }
+      {!isRegistration && 
+        <div className="InputsField">
+            <p>Войти в систему</p>
+          <form>
+            <div className="input">
+              <label>
+                Логин:
+              </label>
+              <TextField 
+                id="outlined-basic" 
+                variant="outlined" 
+                value={login}
+                onChange={(e) => setLogin(e.currentTarget.value)}
+              />
+            </div>
+            <div className="input">
+              <label>
+                Пароль:
+              </label>
+              <TextField 
+                id="outlined-basic" 
+                type="password" 
+                variant="outlined" 
+                value={password}
+                onChange={(e) => setPassword(e.currentTarget.value)}
+              />
+            </div>
+          </form>
+          <div className="btns2">
+            <button 
+              className="btn"
+              onClick={() => authorise()}
+            >
+              Войти
+            </button>
+            <Link to="/registrationPage">
+              <p>
+                Зарегистрироваться
+              </p>
+            </Link>
+          </div>
+          <Snackbar 
+            open={opened} 
+            autoHideDuration={6000} 
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center"
+            }}
+            onClose={() => setAlert({text: '', opened: false})}
+          >
+            <Alert  
+              severity="error" 
+              sx={{ width: '100%' }}
+            >
+              {alertText}
+            </Alert>
+          </Snackbar>
+        </div>
+      }
+    </>
   )
 }
 

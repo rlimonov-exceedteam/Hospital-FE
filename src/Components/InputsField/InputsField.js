@@ -10,7 +10,7 @@ const InputsField = () => {
   const [password2, setPassword2] = useState('');
   const history = useHistory();
 
-  const validate = async () => {
+  const validateAndPost = async () => {
     const regexLogin = /[A-Za-z0-9]/;
     const regexPassword = new RegExp("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$");
 
@@ -46,9 +46,15 @@ const InputsField = () => {
     await axios.post('http://localhost:8000/createNewUser', {
       login,
       password
-    }).then(() => {
-      history.push('mainPage');
-    })
+    }).then(result => {
+      if (result.statusText === 'OK') {
+        setLogin(result.data.login);
+        setPassword(result.data.password);
+        history.push('/mainPage')
+      } else {
+        alert(`Ошибка ${result.status}`)
+      }
+    });
   }
     
   return (
@@ -94,7 +100,7 @@ const InputsField = () => {
       <div className="btns">
         <button 
           className="btn"
-          onClick={() => validate()}
+          onClick={() => validateAndPost()}
         >
           Зарегистрироваться
         </button>

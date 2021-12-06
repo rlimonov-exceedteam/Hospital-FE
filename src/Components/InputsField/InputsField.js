@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react';
-import { TextField } from '@mui/material';
+import { useState } from 'react';
+import { 
+  TextField, 
+  Snackbar,
+  Alert
+} from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
 
-const InputsField = ({ isRegistration }) => {
+const InputsField = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const [repeatedPassword, setRepeatedPassword] = useState('');
+  const [alertOpened, setAlertOpened] = useState();
+  const [alertMessage, setAlertMessage] = useState();
   const history = useHistory();
 
   const validateAndPost = async () => {
@@ -17,29 +23,34 @@ const InputsField = ({ isRegistration }) => {
     if (login) {
       if (!regexLogin.test(login)) {
         setLogin('');
-        alert('Логин должен содержать только латинские символы и цифры.');
+        setAlertMessage('Логин должен содержать только латинские символы и цифры.');
+        setAlertOpened(true);
         return;
       } 
     } else {
-      alert('Введите логин.')
+      setAlertMessage('Введите логин.');
+      setAlertOpened(true);
       return;
     }
 
     if (password) {
       if (!regexPassword.test(password)) {
         setPassword('');
-        alert(`Пароль должен содержать только латинские символы и цифры. 
+        setAlertMessage(`Пароль должен содержать только латинские символы и цифры. 
         Необходимо наличие минимум 1 заглавной, 1 маленькой буквы и 1 цифры. 
         Пароль должен содержать не менее 6 символов.'`);
+        setAlertOpened(true);
         return;
       } 
     } else {
-      alert('Введите пароль');
+      setAlertMessage('Введите пароль');
+      setAlertOpened(true);
       return;
     }
 
-    if (password !== password2) {
-      alert('Пароли не совпадают.');
+    if (password !== repeatedPassword) {
+      setAlertMessage('Пароли не совпадают.');
+      setAlertOpened(true);
       return;
     } 
 
@@ -49,113 +60,78 @@ const InputsField = ({ isRegistration }) => {
     }).then(result => {
       if (result.statusText === 'OK') {
         setLogin(result.data.login);
-        setPassword(result.data.password);
         history.push('/mainPage')
       } else {
-        alert(`Ошибка ${result.status}`)
+        setAlertMessage(`Ошибка ${result.status}`);
+        setAlertOpened(true);
       }
     });
   }
-
-  
     
   return (
-    <>
-      {isRegistration &&
-        <div className="InputsField">
-        <p>Зарегистрироваться</p>
-        <form>
-          <div className="input">
-            <label>
-              Логин:
-            </label>
-            <TextField 
-              id="outlined-basic" 
-              variant="outlined" 
-              value={login}
-              onChange={(e) => setLogin(e.currentTarget.value)}
-            />
-          </div>
-          <div className="input">
-            <label>
-              Пароль:
-            </label>
-            <TextField 
-              id="outlined-basic" 
-              type="password" 
-              variant="outlined" 
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-            />
-          </div>
-          <div className="input">
-            <label>
-              Повторите пароль:
-            </label>
-            <TextField 
-              id="outlined-basic" 
-              type="password" 
-              variant="outlined" 
-              value={password2}
-              onChange={(e) => setPassword2(e.currentTarget.value)}
-            />
-          </div>
-        </form>
-        <div className="btns">
-          <button 
-            className="btn"
-            onClick={() => validateAndPost()}
+    <div className="InputsField">
+      <p>Зарегистрироваться</p>
+      <form>
+        <div className="input">
+          <label>
+            Логин:
+          </label>
+          <TextField 
+            id="outlined-basic" 
+            variant="outlined" 
+            value={login}
+            onChange={(e) => setLogin(e.currentTarget.value)}
+          />
+        </div>
+        <div className="input">
+          <label>
+            Пароль:
+          </label>
+          <TextField 
+            id="outlined-basic" 
+            type="password" 
+            variant="outlined" 
+            value={password}
+            onChange={(e) => setPassword(e.currentTarget.value)}
+          />
+        </div>
+        <div className="input">
+          <label>
+            Повторите пароль:
+          </label>
+          <TextField 
+            id="outlined-basic" 
+            type="password" 
+            variant="outlined" 
+            value={repeatedPassword}
+            onChange={(e) => setRepeatedPassword(e.currentTarget.value)}
+          />
+        </div>
+      </form>
+      <div className="btns">
+        <button 
+          className="btn"
+          onClick={() => validateAndPost()}
+        >
+          Зарегистрироваться
+        </button>
+        <p>
+          Авторизоваться
+        </p>
+        <Snackbar 
+            open={alertOpened} 
+            autoHideDuration={6000} 
+            onClose={() => setAlertOpened(false)}
+        >
+          <Alert  
+            severity="success" 
+            sx={{ width: '100%' }}
           >
-            Зарегистрироваться
-          </button>
-          <p>
-            Авторизоваться
-          </p>
-        </div>
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </div>
-      }
-      {!isRegistration && 
-        <div className="InputsField">
-            <p>Зарегистрироваться</p>
-          <form>
-            <div className="input">
-              <label>
-                Логин:
-              </label>
-              <TextField 
-                id="outlined-basic" 
-                variant="outlined" 
-                value={login}
-                onChange={(e) => setLogin(e.currentTarget.value)}
-              />
-            </div>
-            <div className="input">
-              <label>
-                Пароль:
-              </label>
-              <TextField 
-                id="outlined-basic" 
-                type="password" 
-                variant="outlined" 
-                value={password}
-                onChange={(e) => setPassword(e.currentTarget.value)}
-              />
-            </div>
-          </form>
-          <div className="btns2">
-            <button 
-              className="btn"
-              onClick={() => validateAndPost()}
-            >
-              Войти
-            </button>
-            <p>
-              Зарегистрироваться
-            </p>
-          </div>
-        </div>
-      }
-    </>
+    </div>
   )
 }
 

@@ -2,7 +2,7 @@ import InputsField from '../InputsField/InputsField'
 import Header from '../Header/Header';
 import './LoginPage.scss'
 
-const LoginPage = ({ isRegistration }) => {
+const LoginPage = ({ isRegistration, hasButton }) => {
   
   return (
     <>
@@ -12,6 +12,7 @@ const LoginPage = ({ isRegistration }) => {
           "Зарегистрироваться в системе"
           : "Войти в систему"
         }
+        hasButton={hasButton}
       />
       <div className="LoginPage">
         <div className="image">

@@ -1,0 +1,17 @@
+.icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.bodyTable {
+  text-align: center;
+  background-color: white;
+  outline: 1px solid black;
+
+  td {
+    padding: 20px;
+    outline: 1px solid black;
+  }
+}

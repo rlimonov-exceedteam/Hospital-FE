@@ -1,0 +1,22 @@
+.tableWrapper {
+  height: calc(100vh - 267px);
+  padding: 20px;
+
+  table {
+    width: 100%;
+    height: fit-content;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    .tableHead {
+      background-color: lightgrey;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      font-size: 18px;
+      line-height: 21px;
+
+      th {
+        font-weight: 300;
+        height: 100px;
+      }
+    }
+  }
+}

@@ -8,19 +8,21 @@ import axios from 'axios';
 import './MainPageInputs.scss';
 
 const MainPageInputs = ({
-  patientName,
-  doctorName,
-  complaints,
-  date,
-  setPatientName,
-  setDoctorName,
-  setComplaints,
-  setDate,
   setRows,
   rows
 }) => {
+  const [patientName, setPatientName] = useState('');
+  const [doctorName, setDoctorName] = useState('Петр Петрович');
+  const [complaints, setComplaints] = useState('');
+  const [date, setDate] = useState('');
   const [alert, setAlert] = useState({opened: false, alertText: ''});
   const { opened, alertText } = alert;
+
+  const doctors = [
+    'Штейн Петр Иванович',
+    'Осокина Марина Анатольевна',
+    'Путин Владимир Владимирович'
+  ]
 
   const addRow = async () => {
     if (
@@ -50,15 +52,14 @@ const MainPageInputs = ({
       });
     }
 
-
     setPatientName('');
     setDoctorName('Петр Петрович');
     setComplaints('');
     setDate('');
   }
 
- return (
-   <div className="MainPageInputs">
+  return (
+    <div className="MainPageInputs">
       <div className="inputDiv">
         <p>
           Имя:
@@ -76,10 +77,7 @@ const MainPageInputs = ({
          value={doctorName}
          onChange={(e) => setDoctorName(e.currentTarget.value)}
         >
-          <option>Петр Петрович</option>
-          <option>Иван Иванович</option>
-          <option>Врач Врачев</option>
-          <option>Врач с ну очень длинным именем</option>
+          {doctors.map(elem => <option>{elem}</option>)}
         </select>
       </div>
       <div className="inputDiv">
@@ -104,26 +102,26 @@ const MainPageInputs = ({
       <button onClick={() => addRow()}>
         Добавить
       </button>
-          <Snackbar 
-            open={opened} 
-            autoHideDuration={6000} 
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "center"
-            }}
-            onClose={() => setAlert({text: '', opened: false})}
-          >
-            <Alert  
-              severity="error" 
-              sx={{ width: '100%' }}
-            >
-              <AlertTitle>
-                Ошибка
-              </AlertTitle>
-              {alertText}
-            </Alert>
-          </Snackbar>
-   </div>
+      <Snackbar 
+        open={opened} 
+        autoHideDuration={6000} 
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+        onClose={() => setAlert({text: '', opened: false})}
+      >
+        <Alert  
+          severity="error" 
+          sx={{ width: '100%' }}
+        >
+          <AlertTitle>
+            Ошибка
+          </AlertTitle>
+          {alertText}
+        </Alert>
+      </Snackbar>
+    </div>
  )
 }
 

@@ -7,6 +7,14 @@ const MainTable = ({
   setRows,
   rows
 }) => {
+  const tableHeads = [
+    "Имя",
+    "Врач",
+    "Дата",
+    "Жалобы",
+    "" 
+  ]
+
   useEffect(async () => {
     await axios.get('http://localhost:8000/getAllTableData').then(result => {
       setRows(result.data);
@@ -17,33 +25,15 @@ const MainTable = ({
     <div className="tableWrapper">
       <table cellspacing="0" border="0" cellpadding="0">
         <tr className="tableHead">
-          <th>
-            Имя
-          </th>
-          <th>
-            Врач
-          </th>
-          <th>
-            Дата
-          </th>
-          <th>
-            Жалобы
-          </th>
-          <td>
-            
-          </td>
+          {tableHeads.map(elem => <th>{elem}</th>)}
         </tr>
-        {rows.map((elem) => {
-          console.log(elem)
-          return (
-            <MainTableRow
+        {rows.map((elem) => <MainTableRow
               name={elem.patientName}
               doctor={elem.doctorName}
               date={elem.date}
               complaints={elem.complaints}
             />
-          )
-        })}
+        )}
       </table>
     </div>
   )

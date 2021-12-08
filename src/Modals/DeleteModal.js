@@ -18,8 +18,6 @@ const DeleteModal = ({
   const { opened, text } = alert;
 
   const deleteData = async () => {
-    console.log(_id);
-
     await axios.delete(`http://localhost:8000/deleteTableData?_id=${_id}`).then(() => {
       rows = rows.filter(elem => elem._id !== _id);
       

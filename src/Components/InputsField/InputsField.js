@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import { 
-  TextField, 
-  Snackbar,
-  Alert
-} from '@mui/material';
+import { TextField } from '@mui/material';
+import AlertBox from '../Alert/Alert';
 import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
@@ -12,8 +9,8 @@ const InputsField = ({ isRegistration }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
-  const [alert, setAlert] = useState({opened: false, alertText: ''});
-  const { opened, alertText } = alert;
+  const [alert, setAlert] = useState({opened: false, text: ''});
+  const { opened, text } = alert;
 
   const history = useHistory();
 
@@ -25,14 +22,14 @@ const InputsField = ({ isRegistration }) => {
       if (!regexLogin.test(login)) {
         setLogin('');
         setAlert({
-          alertText: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
+          text: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
           opened: true
         });
         return;
       } 
     } else {
       setAlert({
-        alertText: 'Введите логин.',
+        text: 'Введите логин.',
         opened: true
       });        
       return;
@@ -42,7 +39,7 @@ const InputsField = ({ isRegistration }) => {
       if (!regexPassword.test(password)) {
         setPassword('');
         setAlert({
-          alertText: `Пароль должен содержать только латинские символы и цифры. 
+          text: `Пароль должен содержать только латинские символы и цифры. 
           Необходимо наличие минимум 1 заглавной, 1 маленькой буквы и 1 цифры. 
           Пароль должен содержать не менее 6 символов.`,
           opened: true
@@ -51,7 +48,7 @@ const InputsField = ({ isRegistration }) => {
       } 
     } else {
       setAlert({
-        alertText:'Введите пароль',
+        text:'Введите пароль',
         opened: true
       });
       return;
@@ -59,7 +56,7 @@ const InputsField = ({ isRegistration }) => {
 
     if (password !== repeatedPassword) {
       setAlert({
-        alertText: 'Пароли не совпадают.',
+        text: 'Пароли не совпадают.',
         opened: true
       });
       return;
@@ -74,13 +71,13 @@ const InputsField = ({ isRegistration }) => {
         history.push('/mainPage');
       } else {
         setAlert({
-          alertText: `Ошибка ${result.status}`,
+          text: `Ошибка ${result.status}`,
           opened: true
         });
       }
     }).catch(e => {
       setAlert({
-        alertText: `${e}`,
+        text: e.message,
         opened: true
       });
     });
@@ -89,7 +86,7 @@ const InputsField = ({ isRegistration }) => {
   const authorise = async () => {
     if (!login) {
       setAlert({
-        alertText: 'Введите логин.',
+        text: 'Введите логин.',
         opened: true
       });        
       return;
@@ -97,7 +94,7 @@ const InputsField = ({ isRegistration }) => {
 
     if (!password) {
       setAlert({
-        alertText:'Введите пароль',
+        text:'Введите пароль',
         opened: true
       });
       return;
@@ -113,7 +110,7 @@ const InputsField = ({ isRegistration }) => {
       } 
     }).catch(e => {
       setAlert({
-        alertText: `${e}`,
+        text: e.message,
         opened: true
       });
     });
@@ -173,22 +170,11 @@ const InputsField = ({ isRegistration }) => {
               Авторизоваться
             </p>
           </Link>
-          <Snackbar 
-            open={opened} 
-            autoHideDuration={6000} 
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-            onClose={() => setAlert({text: '', opened: false})}
-          >
-            <Alert  
-              severity="error" 
-              sx={{ width: '100%' }}
-            >
-              {alertText}
-            </Alert>
-          </Snackbar>
+          <AlertBox
+            text={text}
+            opened={opened}
+            setAlert={setAlert}
+          />
         </div>
       </div>
       }
@@ -233,22 +219,11 @@ const InputsField = ({ isRegistration }) => {
               </p>
             </Link>
           </div>
-          <Snackbar 
-            open={opened} 
-            autoHideDuration={6000} 
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "center"
-            }}
-            onClose={() => setAlert({text: '', opened: false})}
-          >
-            <Alert  
-              severity="error" 
-              sx={{ width: '100%' }}
-            >
-              {alertText}
-            </Alert>
-          </Snackbar>
+          <AlertBox
+            text={text}
+            opened={opened}
+            setAlert={setAlert}
+          />
         </div>
       }
     </>

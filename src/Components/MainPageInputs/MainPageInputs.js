@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import { 
-  Snackbar,
-  Alert,
-  AlertTitle
-} from '@mui/material';
+import AlertBox from '../Alert/Alert';
 import axios from 'axios';
 import './MainPageInputs.scss';
 
@@ -12,16 +8,16 @@ const MainPageInputs = ({
   rows
 }) => {
   const [patientName, setPatientName] = useState('');
-  const [doctorName, setDoctorName] = useState('Петр Петрович');
+  const [doctorName, setDoctorName] = useState('П.И. Штейн');
   const [complaints, setComplaints] = useState('');
   const [date, setDate] = useState('');
-  const [alert, setAlert] = useState({opened: false, alertText: ''});
-  const { opened, alertText } = alert;
+  const [alert, setAlert] = useState({opened: false, text: ''});
+  const { opened, text } = alert;
 
   const doctors = [
-    'Штейн Петр Иванович',
-    'Осокина Марина Анатольевна',
-    'Путин Владимир Владимирович'
+    'П.И. Штейн',
+    'М.А. Осокина',
+    'В.В. Путин'
   ]
 
   const addRow = async () => {
@@ -37,18 +33,17 @@ const MainPageInputs = ({
         complaints,
         date
       }).then(result => {
-        const data = result.data;
-        setRows([data, ...rows]);
+        setRows([...rows, result.data]);
       }).catch(error => {
         setAlert({
           opened: true,
-          alertText: error.message
+          text: error.message
         });
       })
     } else {
       setAlert({
         opened: true,
-        alertText: 'Не все поля заполнены'
+        text: 'Не все поля заполнены'
       });
     }
 
@@ -74,8 +69,8 @@ const MainPageInputs = ({
           Врач:
         </p>
         <select
-         value={doctorName}
-         onChange={(e) => setDoctorName(e.currentTarget.value)}
+          value={doctorName}
+          onChange={(e) => setDoctorName(e.currentTarget.value)}
         >
           {doctors.map(elem => <option>{elem}</option>)}
         </select>
@@ -102,27 +97,13 @@ const MainPageInputs = ({
       <button onClick={() => addRow()}>
         Добавить
       </button>
-      <Snackbar 
-        open={opened} 
-        autoHideDuration={6000} 
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center"
-        }}
-        onClose={() => setAlert({text: '', opened: false})}
-      >
-        <Alert  
-          severity="error" 
-          sx={{ width: '100%' }}
-        >
-          <AlertTitle>
-            Ошибка
-          </AlertTitle>
-          {alertText}
-        </Alert>
-      </Snackbar>
+      <AlertBox
+        text={text}
+        opened={opened}
+        setAlert={setAlert}
+      />
     </div>
- )
+  )
 }
 
 export default MainPageInputs;

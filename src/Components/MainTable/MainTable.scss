@@ -1,6 +1,7 @@
 .tableWrapper {
-  height: calc(100vh - 267px);
+  height: calc(100% - 267px);
   padding: 20px;
+  min-height: 100vh;
 
   table {
     width: 100%;

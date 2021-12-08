@@ -11,9 +11,10 @@
 
   td:hover {
     height: 120px;
+    outline: inherit;
   }
 
-  input {
+  p {
     border: none;
     outline: none;
     font-weight: 300;
@@ -22,49 +23,15 @@
     height: 100%;
     width: 100%;
     align-items: flex-start;
+    margin: 0px;
   }
 
-  input:disabled {
-    border: none;
-    outline: none;
-    background-color: white;
-    color: black;
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 21px;
-    height: 100%;
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  textarea {
-    height: 100%;
-    width: 100%;
-    border: none;
-    outline: none;
-    text-overflow: ellipsis;
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 21px;
-    resize: none;
-    display: block;
-    height: 100%;
-  }
-
-  textarea:disabled {
-    border: none;
-    outline: none;
-    background-color: white;
-    color: black;
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 21px;
-    display: block;
-    height: 100%;
+  .complaints {
+    width: 45%;
   }
 }
 
-.icons {
+.icons, .icons:hover {
   display: flex;
   justify-content: space-around;
   align-items: center;

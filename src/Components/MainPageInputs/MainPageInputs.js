@@ -53,56 +53,56 @@ const MainPageInputs = ({
     setDate('');
   }
 
-  return (
-    <div className="MainPageInputs">
-      <div className="inputDiv">
-        <p>
-          Имя:
-        </p>
-        <input 
-          value={patientName}
-          onChange={(e) => setPatientName(e.currentTarget.value)}
-        />
-      </div>
-      <div className="inputDiv">
-        <p>
-          Врач:
-        </p>
-        <select
-          value={doctorName}
-          onChange={(e) => setDoctorName(e.currentTarget.value)}
-        >
-          {doctors.map(elem => <option>{elem}</option>)}
-        </select>
-      </div>
-      <div className="inputDiv">
-        <p>
-          Дата:
-        </p>
-        <input 
-          type="date" 
-          value={date}
-          onChange={(e) => setDate(e.currentTarget.value)}
-        />
-      </div>
-      <div className="inputDiv">
-        <p>
-          Жалобы:
-        </p>
-        <input 
-          value={complaints}
-          onChange={(e) => setComplaints(e.currentTarget.value)}
-        />
-      </div>
-      <button onClick={() => addRow()}>
-        Добавить
-      </button>
-      <AlertBox
-        text={text}
-        opened={opened}
-        setAlert={setAlert}
+return (
+  <div className="MainPageInputs">
+    <div className="inputDiv">
+      <p>
+        Имя:
+      </p>
+      <input 
+        value={patientName}
+        onChange={(e) => setPatientName(e.currentTarget.value)}
       />
     </div>
+    <div className="inputDiv">
+      <p>
+        Врач:
+      </p>
+      <select
+        value={doctorName}
+        onChange={(e) => setDoctorName(e.currentTarget.value)}
+      >
+        {doctors.map(elem => <option>{elem}</option>)}
+      </select>
+    </div>
+    <div className="inputDiv">
+      <p>
+        Дата:
+      </p>
+      <input 
+        type="date" 
+        value={date}
+        onChange={(e) => setDate(e.currentTarget.value)}
+      />
+    </div>
+    <div className="inputDiv">
+      <p>
+        Жалобы:
+      </p>
+      <input 
+        value={complaints}
+        onChange={(e) => setComplaints(e.currentTarget.value)}
+      />
+    </div>
+    <button onClick={() => addRow()}>
+      Добавить
+    </button>
+    <AlertBox
+      text={text}
+      opened={opened}
+      setAlert={setAlert}
+    />
+  </div>
   )
 }
 

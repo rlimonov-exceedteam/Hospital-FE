@@ -2,6 +2,7 @@ import { useState } from 'react';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import UpdateModal from '../../Modals/UpdateModal';
+import DeleteModal from '../../Modals/DeleteModal';
 import './MainTableRow.scss';
 
 const MainTableRow = ({ 
@@ -10,6 +11,7 @@ const MainTableRow = ({
   row
 }) => {
   const [modalOpened, setModalOpened] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
 
   const { 
     patientName,
@@ -20,6 +22,10 @@ const MainTableRow = ({
 
   const toggleModal = () => {
     setModalOpened(!modalOpened);
+  }
+
+  const toggleDelete = () => {
+    setModalDelete(!modalDelete);
   }
 
   return (
@@ -39,7 +45,7 @@ const MainTableRow = ({
           {date}
         </p>
       </td>
-      <td>
+      <td className="complaints">
         <p>
           {complaints}
         </p>
@@ -49,6 +55,7 @@ const MainTableRow = ({
           onClick={() => toggleModal()}
         />
         <CancelRoundedIcon 
+          onClick={() => toggleDelete()}
         />
       </td>
       <UpdateModal 
@@ -57,6 +64,13 @@ const MainTableRow = ({
         setRows={setRows}
         rows={rows}
         row={row}
+      />
+      <DeleteModal 
+        modalDelete={modalDelete}
+        toggleDelete={toggleDelete}
+        setRows={setRows}
+        rows={rows}
+        _id={row._id}
       />
     </tr>
   )

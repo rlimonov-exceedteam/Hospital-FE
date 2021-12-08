@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import MainTableRow from '../MainTableRow/MainTableRow';
-import axios from 'axios';
 import './MainTable.scss';
 
 const MainTable = ({
@@ -13,13 +11,7 @@ const MainTable = ({
     "Дата",
     "Жалобы",
     "" 
-  ]
-
-  useEffect(async () => {
-    await axios.get('http://localhost:8000/getAllTableData').then(result => {
-      setRows(result.data);
-    })
-  }, []);
+  ];
 
   return (
     <div className="tableWrapper">
@@ -28,11 +20,10 @@ const MainTable = ({
           {tableHeads.map(elem => <th>{elem}</th>)}
         </tr>
         {rows.map((elem) => <MainTableRow
-              name={elem.patientName}
-              doctor={elem.doctorName}
-              date={elem.date}
-              complaints={elem.complaints}
-            />
+            row={elem}
+            setRows={setRows}
+            rows={rows}
+          />
         )}
       </table>
     </div>

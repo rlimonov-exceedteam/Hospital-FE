@@ -34,7 +34,7 @@ const UpdateModal = ({
     'П.И. Штейн',
     'М.А. Осокина',
     'В.В. Путин'
-  ]
+  ];
 
   const update = async () => {
     await axios.patch('http://localhost:8000/updateTableData', {

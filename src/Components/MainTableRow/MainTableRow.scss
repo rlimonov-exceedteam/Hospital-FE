@@ -10,7 +10,6 @@
   }
 
   td:hover {
-    height: 120px;
     outline: inherit;
   }
 
@@ -34,7 +33,13 @@
 .icons, .icons:hover {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
   outline: none;
   height: calc(100% - 40px);
+  margin-top: 0px;
+
+}
+
+.icons:hover {
+  cursor: pointer;
 }

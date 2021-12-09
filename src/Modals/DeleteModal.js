@@ -33,17 +33,17 @@ const DeleteModal = ({
       open={modalDelete} 
       onClose={() => toggleDelete()}
     >
-      <header>
+      <header className="delete-header">
         <p>
           Удалить прием
           </p>
       </header>
-      <section>
+      <section className="delete-section">
         <p>
           Вы действительно хотите удалить прием?
         </p>
       </section>
-      <footer>
+      <footer className="delete-footer">
         <button 
           className="close"
           onClick={() => toggleDelete()}

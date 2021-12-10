@@ -2,6 +2,10 @@ import MainTableRow from '../MainTableRow/MainTableRow';
 import './MainTable.scss';
 
 const MainTable = ({
+  sortValues,
+  sortData,
+  sorting,
+  initial,
   setRows,
   isAsc,
   sort,
@@ -22,6 +26,10 @@ const MainTable = ({
           {tableHeads.map(elem => <th>{elem}</th>)}
         </tr>
         {rows.map((elem) => <MainTableRow
+            sortValues={sortValues}
+            sortData={sortData}
+            sorting={sorting}
+            initial={initial}
             setRows={setRows}
             isAsc={isAsc}
             sort={sort}

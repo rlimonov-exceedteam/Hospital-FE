@@ -1,21 +1,36 @@
 import { useState, useEffect } from 'react';
 import MainPageInputs from '../MainPageInputs/MainPageInputs';
 import MainTable from '../MainTable/MainTable';
-import SortSection from '../SortSection/SortSection';
 import AlertBox from '../Alert/Alert';
 import Header from '../Header/Header';
 import axios from 'axios';
 import './MainPage.scss';
 
-let isAsc = true;
-
 const MainPage = () => {
+  const sortValues = [
+    "Без сортировки",
+    "По имени пациента",
+    "По имени доктора",
+    "По дате"
+  ];
+
+  const directionValues = [
+    'По возрастанию',
+    'По убыванию'
+  ];
+
   const [rows, setRows] = useState([]);
   const [initial, setInitial] = useState([]);
   const [sort, setSort] = useState({
     isSort: false, 
-    sortBy: 'Без сортировки'
+    sortBy: sortValues[0], 
+    isAsc: true
   });
+
+  const {
+    sortBy,
+    isAsc
+  } = sort;
 
   const [alert, setAlert] = useState({
     opened: false, 
@@ -25,7 +40,7 @@ const MainPage = () => {
 
   useEffect(async () => {
     await axios.get('http://localhost:8000/getAllTableData').then(result => {
-      setRows(result.data.reverse());
+      setRows(result.data);
       setInitial([...result.data]);
     }).catch(error => {
       setAlert({
@@ -35,87 +50,103 @@ const MainPage = () => {
     });
   }, []);
 
-  const handleAscending = (value) => {
-    if (value === "По возрастанию") isAsc = true;
-    else isAsc = false;
-    
-    handleSorting(sort.sortBy);
-  }
+  const sortData = (by, asc, rows) => {
+    const arr = rows;
 
-  const handleSorting = (value) => {
-    if (value === "По имени пациента") {
-      setSort({
-        sortBy: "По имени пациента",
-        isSort: true
-      });
-      sortByPatient(isAsc);
-
-    } else if (value === "Без сортировки") {
-      setSort({
-        sortBy: "Без сортировки",
-        isSort: false
-      });
-      setRows([...initial]);
-
-    } else if (value === "По имени доктора") {
-      setSort({
-        sortBy: "По имени доктора",
-        isSort: true
-      });
-      sortByDoctor(isAsc);
-
-    } else if (value === "По дате") {
-      setSort({
-        sortBy: "По дате",
-        isSort: true
-      });
-      sortByDate(isAsc);
-    }
-  }
-
-  const sortByPatient = (asc) => {
-    if (asc) {
-      const arr = rows.sort((p, n) => 
+    if (by === 'patient') {
+      arr.sort((p, n) => 
         p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1);
-        setRows([...arr]);
-    } else {
-      const arr = rows.sort((p, n) => 
-        p.patientName.toLowerCase() < n.patientName.toLowerCase() ? 1 : -1);
-        setRows([...arr]);
-    }
-  }
+      asc ? setRows([...arr]) : setRows([...arr.reverse()])
 
-  const sortByDoctor = (asc) => {
-    if (asc) {
-      const arr = rows.sort((p, n) => 
+    } else if (by === 'doctor') {
+      arr.sort((p, n) => 
         p.doctorName > n.doctorName ? 1 : -1);
-        setRows([...arr]);
-    } else {
-      const arr = rows.sort((p, n) => 
-        p.doctorName < n.doctorName ? 1 : -1);
-        setRows([...arr]);
-    }
-  }
+      asc ? setRows([...arr]) : setRows([...arr.reverse()])
 
-  const sortByDate = (asc) => {
-    if (asc) {
-      const arr = rows.sort((p,n) => {
+    } else {
+      arr.sort((p,n) => {
         const c = new Date(p.date);
         const d = new Date(n.date);
-
+        
         return c - d;
       });
-      setRows([...arr]);
-    } else {
-      const arr = rows.sort((p,n) => {
-        const c = new Date(p.date);
-        const d = new Date(n.date);
-
-        return d - c;
-      });
-      setRows([...arr]);
+      asc ? setRows([...arr]) : setRows([...arr.reverse()])
     }
   }
+
+  const sorting = (
+    sortValues,
+    sortBy, 
+    sort, 
+    isAsc, 
+    sortData, 
+    initial, 
+    rows
+  ) => {
+    console.log(sortValues)
+    switch(sortBy) {
+      case sortValues[1]:
+        setSort({
+          ...sort,
+          isSort: true
+        });
+        sortData('patient', isAsc, rows);
+        break;
+
+      case sortValues[0]:
+        setSort({
+          ...sort,
+          isSort: false
+        });
+        setRows([...initial]);
+        break;
+
+      case sortValues[2]:
+        setSort({
+          ...sort,
+          isSort: true
+        });
+        sortData('doctor', isAsc, rows);
+        break;
+
+      case sortValues[3]:
+        setSort({
+          ...sort,
+          isSort: true
+        });
+        sortData('date', isAsc, rows);
+        break;
+    }
+    console.log(rows)
+  }
+  
+
+  useEffect(() => {
+    sorting(
+      sortValues, 
+      sortBy, 
+      sort, 
+      isAsc, 
+      sortData, 
+      initial, 
+      rows
+    );
+  }, [isAsc, initial, sortBy]);
+
+  const handleAscending = (value) => {
+    let flag;
+
+    value === directionValues[1] 
+    ? flag = false 
+    : flag = true;
+    
+    setSort({
+      ...sort,
+      isAsc: flag
+    });
+  }
+
+  
 
   return (
     <>
@@ -124,15 +155,29 @@ const MainPage = () => {
         hasButton={true}
       />
       <MainPageInputs
+        sortValues={sortValues}
+        sortData={sortData}
         setRows={setRows}
-        isAsc={isAsc}
+        sorting={sorting}
+        initial={initial}
         sort={sort}
         rows={rows}
       />
       <div className="sorting">
-        <SortSection 
-          handleSorting={handleSorting}
-        />
+      <div className="sort-wrapper">
+        <label>
+          Сортировать:
+        </label>
+        <select
+          onChange={(e) => setSort({
+            ...sort, 
+            sortBy: e.currentTarget.value
+            }
+          )}
+        >
+          {sortValues.map(elem => <option>{elem}</option>)}
+        </select>
+      </div>
         {sort.isSort && 
           <div className="sort-wrapper">
             <label>
@@ -141,15 +186,17 @@ const MainPage = () => {
             <select
               onChange={(e) => handleAscending(e.currentTarget.value)}
             >
-              <option>По возрастанию</option>
-              <option>По убыванию</option>
+              {directionValues.map(elem => <option>{elem}</option>)}
             </select>
           </div>
         }
       </div>
       <MainTable 
         setRows={setRows}
-        isAsc={isAsc}
+        sortData={sortData}
+        sortValues={sortValues}
+        sorting={sorting}
+        initial={initial}
         sort={sort}
         rows={rows}
       />

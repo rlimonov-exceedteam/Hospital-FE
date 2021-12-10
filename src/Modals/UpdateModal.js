@@ -7,15 +7,22 @@ import "./UpdateModal.scss";
 const UpdateModal = ({
   modalOpened,
   toggleModal,
+  sortValues,
   setRows,
-  isAsc,
+  sortData,
+  sorting,
+  initial,
   sort,
   rows,
-  row,
+  row
 }) => {
   const { patientName, doctorName, complaints, date, _id } = row;
 
-  const { isSort, sortBy } = sort;
+  const { 
+    isSort, 
+    sortBy,
+    isAsc,
+  } = sort;
 
   const [alert, setAlert] = useState({
     opened: false,
@@ -47,55 +54,17 @@ const UpdateModal = ({
             rows[index] = response;
           }
         });
+        setRows([...rows]);
 
-        if (isSort) {
-          if (sortBy === "По имени пациента") {
-            if (isAsc) {
-              const arr = rows.sort((p, n) =>
-                p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1
-              );
-              setRows([...arr]);
-            } else {
-              const arr = rows.sort((p, n) =>
-                p.patientName.toLowerCase() < n.patientName.toLowerCase() ? 1 : -1
-              );
-              console.log("arr", arr);
-              setRows([...arr]);
-            }
-          } else if (sortBy === "По имени доктора") {
-            if (isAsc) {
-              const arr = rows.sort((p, n) =>
-                p.doctorName > n.doctorName ? 1 : -1
-              );
-              setRows([...arr]);
-            } else {
-              const arr = rows.sort((p, n) =>
-                p.doctorName < n.doctorName ? 1 : -1
-              );
-              setRows([...arr]);
-            }
-          } else if (sortBy === "По дате") {
-            if (isAsc) {
-              const arr = rows.sort((p, n) => {
-                const c = new Date(p.date);
-                const d = new Date(n.date);
-
-                return c - d;
-              });
-              setRows([...arr]);
-            } else {
-              const arr = rows.sort((p, n) => {
-                const c = new Date(p.date);
-                const d = new Date(n.date);
-
-                return d - c;
-              });
-              setRows([...arr]);
-            }
-          }
-        } else {
-          setRows([...rows]);
-        }
+        isSort && sorting(
+          sortValues,
+          sortBy, 
+          sort, 
+          isAsc, 
+          sortData, 
+          initial, 
+          rows
+        );
         toggleModal();
       })
       .catch((error) => {

@@ -5,7 +5,17 @@ import UpdateModal from "../../Modals/UpdateModal";
 import DeleteModal from "../../Modals/DeleteModal";
 import "./MainTableRow.scss";
 
-const MainTableRow = ({ setRows, isAsc, sort, rows, row }) => {
+const MainTableRow = ({ 
+  sortValues,
+  sortData,
+  sorting,
+  initial,
+  setRows, 
+  isAsc, 
+  sort, 
+  rows, 
+  row 
+}) => {
   const [modalOpened, setModalOpened] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
 
@@ -41,6 +51,10 @@ const MainTableRow = ({ setRows, isAsc, sort, rows, row }) => {
         <UpdateModal
           modalOpened={modalOpened}
           toggleModal={toggleModal}
+          sortValues={sortValues}
+          sortData={sortData}
+          sorting={sorting}
+          initial={initial}
           setRows={setRows}
           isAsc={isAsc}
           sort={sort}

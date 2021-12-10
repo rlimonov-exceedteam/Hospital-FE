@@ -3,23 +3,48 @@ import AlertBox from "../Alert/Alert";
 import axios from "axios";
 import "./MainPageInputs.scss";
 
-const MainPageInputs = ({ setRows, isAsc, sort, rows }) => {
+const MainPageInputs = ({ 
+  sortValues,
+  sortData,
+  setRows,
+  sorting,
+  initial, 
+  sort, 
+  rows 
+}) => {
+  const doctors = [
+    "Штейн П.И.", 
+    "Осокина М.А.", 
+    "Путин В.В."
+  ];
+
   const [patientName, setPatientName] = useState("");
-  const [doctorName, setDoctorName] = useState("Штейн П.И.");
+  const [doctorName, setDoctorName] = useState(doctors[0]);
   const [complaints, setComplaints] = useState("");
   const [date, setDate] = useState("");
   const [alert, setAlert] = useState({
     opened: false,
     text: "",
   });
-  const { opened, text } = alert;
 
-  const { isSort, sortBy } = sort;
+  const { 
+    opened, 
+    text 
+  } = alert;
 
-  const doctors = ["Штейн П.И.", "Осокина М.А.", "Путин В.В."];
+  const { 
+    isSort, 
+    sortBy, 
+    isAsc 
+  } = sort;
 
   const addRow = async () => {
-    if (patientName && doctorName && complaints && date) {
+    if (
+      patientName && 
+      doctorName && 
+      complaints && 
+      date
+    ) {
       await axios
         .post("http://localhost:8000/addTableData", {
           patientName,
@@ -28,57 +53,19 @@ const MainPageInputs = ({ setRows, isAsc, sort, rows }) => {
           date,
         })
         .then((result) => {
-          let array = [...rows];
+          const array = [...rows];
           array.unshift(result.data);
+          setRows([...array]);
 
-          if (isSort) {
-            if (sortBy === "По имени пациента") {
-              if (isAsc) {
-                const arr = array.sort((p, n) =>
-                  p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1
-                );
-                setRows([...arr]);
-              } else {
-                const arr = array.sort((p, n) =>
-                  p.patientName.toLowerCase() < n.patientName.toLowerCase() ? 1 : -1
-                );
-                console.log("arr", arr);
-                setRows([...arr]);
-              }
-            } else if (sortBy === "По имени доктора") {
-              if (isAsc) {
-                const arr = array.sort((p, n) =>
-                  p.doctorName > n.doctorName ? 1 : -1
-                );
-                setRows([...arr]);
-              } else {
-                const arr = array.sort((p, n) =>
-                  p.doctorName < n.doctorName ? 1 : -1
-                );
-                setRows([...arr]);
-              }
-            } else if (sortBy === "По дате") {
-              if (isAsc) {
-                const arr = array.sort((p, n) => {
-                  const c = new Date(p.date);
-                  const d = new Date(n.date);
-
-                  return c - d;
-                });
-                setRows([...arr]);
-              } else {
-                const arr = array.sort((p, n) => {
-                  const c = new Date(p.date);
-                  const d = new Date(n.date);
-
-                  return d - c;
-                });
-                setRows([...arr]);
-              }
-            }
-          } else {
-            setRows([...array]);
-          }
+          isSort && sorting(
+            sortValues,
+            sortBy, 
+            sort, 
+            isAsc, 
+            sortData, 
+            initial, 
+            array
+          );
         })
         .catch((error) => {
           setAlert({

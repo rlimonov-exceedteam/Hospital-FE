@@ -50,27 +50,35 @@ const MainPage = () => {
     });
   }, []);
 
-  const sortData = (by, asc, rows) => {
+  const sortData = (isSort, by, asc, rows) => {
+    setSort({
+      ...sort,
+      isSort
+    });
+
     const arr = rows;
 
-    if (by === 'patient') {
-      arr.sort((p, n) => 
-        p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1);
-      asc ? setRows([...arr]) : setRows([...arr.reverse()])
+    switch(by) {
+      case('patient'):
+        arr.sort((p, n) => 
+          p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1);
+        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+        break;
 
-    } else if (by === 'doctor') {
-      arr.sort((p, n) => 
-        p.doctorName > n.doctorName ? 1 : -1);
-      asc ? setRows([...arr]) : setRows([...arr.reverse()])
+      case('doctor'):
+        arr.sort((p, n) => 
+          p.doctorName > n.doctorName ? 1 : -1);
+        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+        break;
 
-    } else {
-      arr.sort((p,n) => {
-        const c = new Date(p.date);
-        const d = new Date(n.date);
-        
-        return c - d;
-      });
-      asc ? setRows([...arr]) : setRows([...arr.reverse()])
+      default:
+        arr.sort((p,n) => {
+          const c = new Date(p.date);
+          const d = new Date(n.date);
+          
+          return c - d;
+        });
+        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
     }
   }
 
@@ -83,14 +91,9 @@ const MainPage = () => {
     initial, 
     rows
   ) => {
-    console.log(sortValues)
     switch(sortBy) {
       case sortValues[1]:
-        setSort({
-          ...sort,
-          isSort: true
-        });
-        sortData('patient', isAsc, rows);
+        sortData(true, 'patient', isAsc, rows);
         break;
 
       case sortValues[0]:
@@ -102,25 +105,15 @@ const MainPage = () => {
         break;
 
       case sortValues[2]:
-        setSort({
-          ...sort,
-          isSort: true
-        });
-        sortData('doctor', isAsc, rows);
+        sortData(true, 'doctor', isAsc, rows);
         break;
 
       case sortValues[3]:
-        setSort({
-          ...sort,
-          isSort: true
-        });
-        sortData('date', isAsc, rows);
+        sortData(true, 'date', isAsc, rows);
         break;
     }
-    console.log(rows)
   }
   
-
   useEffect(() => {
     sorting(
       sortValues, 
@@ -134,19 +127,13 @@ const MainPage = () => {
   }, [isAsc, initial, sortBy]);
 
   const handleAscending = (value) => {
-    let flag;
-
-    value === directionValues[1] 
-    ? flag = false 
-    : flag = true;
+    let flag = value === directionValues[1] ? false : true;
     
     setSort({
       ...sort,
       isAsc: flag
     });
   }
-
-  
 
   return (
     <>
@@ -201,9 +188,9 @@ const MainPage = () => {
         rows={rows}
       />
       <AlertBox
-       setAlert={setAlert}
-       opened={opened}
-       text={text}
+        setAlert={setAlert}
+        opened={opened}
+        text={text}
       />
     </>
   )

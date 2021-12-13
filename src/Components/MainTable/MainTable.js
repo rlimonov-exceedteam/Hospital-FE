@@ -2,6 +2,8 @@ import MainTableRow from '../MainTableRow/MainTableRow';
 import './MainTable.scss';
 
 const MainTable = ({
+  setWithoutFilter,
+  withoutFilter,
   sortValues,
   sortData,
   sorting,
@@ -26,6 +28,8 @@ const MainTable = ({
           {tableHeads.map(elem => <th>{elem}</th>)}
         </tr>
         {rows.map((elem) => <MainTableRow
+            setWithoutFilter={setWithoutFilter}
+            withoutFilter={withoutFilter}
             sortValues={sortValues}
             sortData={sortData}
             sorting={sorting}

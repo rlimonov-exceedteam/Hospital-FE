@@ -5,6 +5,8 @@ import axios from 'axios';
 import './DeleteModal.scss';
 
 const DeleteModal = ({ 
+  setWithoutFilter,
+  withoutFilter,
   modalDelete,
   toggleDelete,
   setRows,
@@ -20,8 +22,11 @@ const DeleteModal = ({
   const deleteData = async () => {
     await axios.delete(`http://localhost:8000/deleteTableData?_id=${_id}`).then(() => {
       rows = rows.filter(elem => elem._id !== _id);
-      
       setRows([...rows]);
+
+      withoutFilter = withoutFilter.filter(elem => elem._id !== _id);
+      setWithoutFilter([...withoutFilter]);
+      
       toggleDelete();
     }).catch(err => {
       setAlert({opened: true, text: err.message})

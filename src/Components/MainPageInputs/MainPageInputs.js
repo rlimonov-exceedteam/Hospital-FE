@@ -4,6 +4,8 @@ import axios from "axios";
 import "./MainPageInputs.scss";
 
 const MainPageInputs = ({ 
+  setWithoutFilter,
+  withoutFilter,
   sortValues,
   sortData,
   setRows,
@@ -53,9 +55,12 @@ const MainPageInputs = ({
           date,
         })
         .then((result) => {
-          const array = [...rows];
+          let array = [...rows];
           array.unshift(result.data);
           setRows([...array]);
+
+          array = withoutFilter.unshift(result.data);
+          setWithoutFilter([...withoutFilter]);
 
           isSort && sorting(
             sortValues,
@@ -88,40 +93,46 @@ const MainPageInputs = ({
 
   return (
     <div className="MainPageInputs">
-      <div className="inputDiv">
-        <p>Имя:</p>
-        <input
-          value={patientName}
-          onChange={(e) => setPatientName(e.currentTarget.value)}
-        />
+      <div className="wrapper">
+        <div className="inputDiv">
+          <p>Имя:</p>
+          <input
+            value={patientName}
+            onChange={(e) => setPatientName(e.currentTarget.value)}
+          />
+        </div>
+        <div className="inputDiv">
+          <p>Врач:</p>
+          <select
+            value={doctorName}
+            onChange={(e) => setDoctorName(e.currentTarget.value)}
+          >
+            {doctors.map((elem) => (
+              <option>{elem}</option>
+            ))}
+          </select>
+        </div>
+        <div className="inputDiv">
+          <p>Дата:</p>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.currentTarget.value)}
+          />
+        </div>
+        <div className="inputDiv">
+          <p>Жалобы:</p>
+          <input
+            value={complaints}
+            onChange={(e) => setComplaints(e.currentTarget.value)}
+          />
+        </div>
+        <div className="buttons">
+            <button onClick={() => addRow()}>
+              Добавить
+            </button>
+        </div>
       </div>
-      <div className="inputDiv">
-        <p>Врач:</p>
-        <select
-          value={doctorName}
-          onChange={(e) => setDoctorName(e.currentTarget.value)}
-        >
-          {doctors.map((elem) => (
-            <option>{elem}</option>
-          ))}
-        </select>
-      </div>
-      <div className="inputDiv">
-        <p>Дата:</p>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.currentTarget.value)}
-        />
-      </div>
-      <div className="inputDiv">
-        <p>Жалобы:</p>
-        <input
-          value={complaints}
-          onChange={(e) => setComplaints(e.currentTarget.value)}
-        />
-      </div>
-      <button onClick={() => addRow()}>Добавить</button>
       <AlertBox text={text} opened={opened} setAlert={setAlert} />
     </div>
   );

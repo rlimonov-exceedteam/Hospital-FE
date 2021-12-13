@@ -4,6 +4,14 @@
   align-items: center;
   justify-content: flex-end;
 
+  @media screen and (max-width: 500px) {
+    justify-content: center;
+  }
+  
+  @media screen and (max-width: 532px) {
+    height: 75px;
+  }
+
   select {
     margin: 15px 20px 0px;
     background: #FFFFFF;
@@ -15,6 +23,23 @@
     font-weight: 300;
     font-size: 18px;
     line-height: 21px;
+
+
+    @media screen and (max-width: 532px) {
+      font-size: 16px;
+      height: 37px;
+    }
+
+    @media screen and (max-width: 500px) {
+      justify-content: center;
+      margin-right: 0;
+      margin-left: 5px;
+    }
+
+    @media screen and (max-width: 375px) {
+      font-size: 14px;
+      height: 35px;
+    }
   }
 
   label{
@@ -22,5 +47,15 @@
     font-weight: 300;
     font-size: 18px;
     line-height: 21px;
+
+    @media screen and (max-width: 532px) {
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 21px;
+    }
+
+    @media screen and (max-width: 375px) {
+      font-size: 14px;
+    }
   }
 }

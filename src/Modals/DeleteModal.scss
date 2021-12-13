@@ -8,8 +8,42 @@
   width: 552px;
   height: 80px;
   font-weight: 300;
-  font-size: 24px;
+  font-size: 21px;
   line-height: 28px;
+
+  @media screen and (max-width: 600px) {
+    position: relative;
+    font-size: 18px;
+    right: 80px;
+  }
+
+  @media screen and (max-width: 475px) {
+    font-size: 21px;
+    line-height: 25px;
+    position: relative;
+    right: 80px;
+  }
+
+  @media screen and (max-width: 475px) {
+    right: 100px;
+    font-size: 14px;
+  }
+
+  @media screen and (max-width: 380px) {
+    right: 120px;
+  }
+
+  @media screen and (max-width: 375px) {
+    right: 130px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  @media screen and (max-width: 340px) {
+    right:130px;
+    font-size: 13px;
+    line-height: 20px;
+  }
 }
 
 .delete {

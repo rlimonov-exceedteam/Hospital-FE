@@ -6,6 +6,8 @@ import DeleteModal from "../../Modals/DeleteModal";
 import "./MainTableRow.scss";
 
 const MainTableRow = ({ 
+  setWithoutFilter,
+  withoutFilter,
   sortValues,
   sortData,
   sorting,
@@ -49,6 +51,8 @@ const MainTableRow = ({
       </td>
       {modalOpened && (
         <UpdateModal
+          setWithoutFilter={setWithoutFilter}
+          withoutFilter={withoutFilter}
           modalOpened={modalOpened}
           toggleModal={toggleModal}
           sortValues={sortValues}
@@ -64,6 +68,8 @@ const MainTableRow = ({
       )}
       {modalDelete && (
         <DeleteModal
+          setWithoutFilter={setWithoutFilter}
+          withoutFilter={withoutFilter}
           toggleDelete={toggleDelete}
           modalDelete={modalDelete}
           setRows={setRows}

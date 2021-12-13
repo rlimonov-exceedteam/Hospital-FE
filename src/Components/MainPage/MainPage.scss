@@ -1,6 +1,12 @@
 .sorting {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 720px) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .sort-wrapper {
@@ -20,6 +26,16 @@
     font-weight: 300;
     font-size: 18px;
     line-height: 21px;
+
+    @media screen and (max-width: 720px) {
+      margin-right: 0px;
+    }
+
+    @media screen and (max-width: 450px) {
+      font-size: 15px;
+      line-height: 17px;
+      margin-left: 7px;
+    }
   }
 
   label{
@@ -27,5 +43,105 @@
     font-weight: 300;
     font-size: 18px;
     line-height: 21px;
+
+    @media screen and (max-width: 450px) {
+      font-size: 15px;
+      line-height: 17px;
+    }
+  }
+}
+
+.add-filter {
+  display: flex;
+  align-items: center;
+  position: relative;
+  top: 6px;
+  margin-right: 20px;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 21px;
+
+  @media screen and (max-width: 450px) {
+    font-size: 15px;
+    line-height: 17px;
+  }
+}
+
+.filter-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 940px) {
+    justify-content: center;
+  }
+
+  .filter-input {
+    margin : 15px;
+
+    @media screen and (max-width: 940px) {
+      margin-right: 0px;
+    }
+  }
+
+  label {
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+    margin: auto 10px;
+
+    @media screen and (max-width: 450px) {
+      font-size: 15px;
+      line-height: 17px;
+    }
+  }
+
+  input {
+    width: 238px;
+    height: 40px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+    padding-left: 10px;
+
+    @media screen and (max-width: 450px) {
+      font-size: 15px;
+      line-height: 17px;
+    }
+  }
+  
+  .filter-buttons {
+    display: flex;
+    margin : 15px;
+
+    @media screen and (max-width: 940px) {
+      margin-right: 0px;
+    }
+
+    button {
+      width: 208px;
+      height: 40px;
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      box-sizing: border-box;
+      border-radius: 4px;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 21px;
+      margin: auto 20px;
+    }
+  
+    svg:hover, button:hover {
+      cursor: pointer;
+    }
   }
 }

@@ -5,6 +5,8 @@ import axios from "axios";
 import "./UpdateModal.scss";
 
 const UpdateModal = ({
+  setWithoutFilter,
+  withoutFilter,
   modalOpened,
   toggleModal,
   sortValues,
@@ -55,6 +57,13 @@ const UpdateModal = ({
           }
         });
         setRows([...rows]);
+        
+        withoutFilter.forEach((item, index) => {
+          if (item._id === response._id) {
+            withoutFilter[index] = response;
+          }
+        });
+        setWithoutFilter([...withoutFilter]);
 
         isSort && sorting(
           sortValues,

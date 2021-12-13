@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import MainPageInputs from "../MainPageInputs/MainPageInputs";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import CloseIcon from '@mui/icons-material/Close';
 import MainTable from "../MainTable/MainTable";
 import AlertBox from "../Alert/Alert";
 import Header from "../Header/Header";
@@ -18,6 +20,18 @@ const MainPage = () => {
 
   const [rows, setRows] = useState([]);
   const [initial, setInitial] = useState([]);
+  const [withoutFilter, setWithoutFilter] = useState([]);
+  const [filtration, setFiltration] = useState({
+    isFilting: false,
+    from: '', 
+    to: ''
+  });
+  const { 
+    isFilting,
+    from,
+    to
+  } = filtration;
+
   const [sort, setSort] = useState({
     isSort: false,
     sortBy: sortValues[0],
@@ -38,6 +52,7 @@ const MainPage = () => {
       .then((result) => {
         setRows(result.data);
         setInitial([...result.data]);
+        setWithoutFilter([...result.data]);
       })
       .catch((error) => {
         setAlert({
@@ -51,15 +66,16 @@ const MainPage = () => {
 
     arr.sort((p, n) => (p[key].toLowerCase() > n[key].toLowerCase() ? 1 : -1));
     asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+    setWithoutFilter([...rows]);
   };
 
-  const sortData = (isSort, by, asc, rows) => {
+  const sortData = (isSort, by, asc, mainArray) => {
     setSort({
       ...sort,
       isSort,
     });
 
-    const arr = rows;
+    const arr = mainArray;
 
     if (by !== "date") {
       sortFunction(arr, by, asc);
@@ -71,6 +87,7 @@ const MainPage = () => {
         return c - d;
       });
       asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+      setWithoutFilter([...mainArray]);
     }
   };
 
@@ -94,6 +111,7 @@ const MainPage = () => {
           isSort: false,
         });
         setRows([...initial]);
+        setWithoutFilter([...initial]);
         break;
 
       case sortValues[2]:
@@ -105,6 +123,33 @@ const MainPage = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    isFilting && filterByDate(withoutFilter);
+  }, [withoutFilter]);
+
+  const filterByDate = (initArray) => {
+    let arr = [...initArray];
+    if (from) {
+      const point = new Date(from);
+      arr = arr.filter(elem => new Date(elem.date) >= point);
+    }
+    
+    if (to) {
+      const point = new Date(to);
+      arr = arr.filter(elem => new Date(elem.date) <= point);
+    }
+
+    setRows([...arr]);
+  }
+
+  const closeFilter = () => {
+    setRows([...withoutFilter]);
+    setFiltration({
+      ...filtration,
+      isFilting: false,
+    });
+  }
 
   useEffect(() => {
     sorting(sortValues, sortBy, sort, isAsc, sortData, initial, rows);
@@ -123,6 +168,8 @@ const MainPage = () => {
     <>
       <Header text="Приемы" hasButton={true} />
       <MainPageInputs
+        setWithoutFilter={setWithoutFilter}
+        withoutFilter={withoutFilter}
         sortValues={sortValues}
         sortData={sortData}
         setRows={setRows}
@@ -157,11 +204,70 @@ const MainPage = () => {
             </select>
           </div>
         )}
+        <div className="filter-wrapper">
+          {!isFilting &&
+            <div className="add-filter">
+              <p>
+                Добавить фильтр по дате: 
+              </p>
+              <AddBoxIcon 
+                fontSize="large" 
+                onClick={() => setFiltration({
+                  ...filtration,
+                  isFilting: true
+                })}
+              />
+            </div>
+          }
+          {isFilting && 
+            <div className="filter">
+              <div className="filter-input">
+                <label>
+                  От:
+                </label>
+                <input 
+                  type="date" 
+                  value={from}
+                  onChange={(e) => setFiltration({
+                    ...filtration,
+                    from: e.currentTarget.value
+                  })}
+                />
+              </div>
+              <div className="filter-input">
+                <label>
+                  По:
+                </label>
+                <input 
+                  type="date" 
+                  value={to}
+                  onChange={(e) => setFiltration({
+                    ...filtration,
+                    to: e.currentTarget.value
+                  })}
+                />
+              </div>
+              <div className='filter-buttons'>
+                <button
+                  onClick={() => filterByDate(withoutFilter)}
+                >
+                  Фильтровать
+                </button>
+                <CloseIcon 
+                  fontSize="large" 
+                  onClick={() => closeFilter()}
+                />
+              </div>
+            </div>
+          }
+        </div>
       </div>
       <MainTable
-        setRows={setRows}
-        sortData={sortData}
+        setWithoutFilter={setWithoutFilter}
+        withoutFilter={withoutFilter}
         sortValues={sortValues}
+        sortData={sortData}
+        setRows={setRows}
         sorting={sorting}
         initial={initial}
         sort={sort}

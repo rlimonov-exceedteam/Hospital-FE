@@ -1,146 +1,128 @@
-import { useState, useEffect } from 'react';
-import MainPageInputs from '../MainPageInputs/MainPageInputs';
-import MainTable from '../MainTable/MainTable';
-import AlertBox from '../Alert/Alert';
-import Header from '../Header/Header';
-import axios from 'axios';
-import './MainPage.scss';
+import { useState, useEffect } from "react";
+import MainPageInputs from "../MainPageInputs/MainPageInputs";
+import MainTable from "../MainTable/MainTable";
+import AlertBox from "../Alert/Alert";
+import Header from "../Header/Header";
+import axios from "axios";
+import "./MainPage.scss";
 
 const MainPage = () => {
   const sortValues = [
     "Без сортировки",
     "По имени пациента",
     "По имени доктора",
-    "По дате"
+    "По дате",
   ];
 
-  const directionValues = [
-    'По возрастанию',
-    'По убыванию'
-  ];
+  const directionValues = ["По возрастанию", "По убыванию"];
 
   const [rows, setRows] = useState([]);
   const [initial, setInitial] = useState([]);
   const [sort, setSort] = useState({
-    isSort: false, 
-    sortBy: sortValues[0], 
-    isAsc: true
+    isSort: false,
+    sortBy: sortValues[0],
+    isAsc: true,
   });
 
-  const {
-    sortBy,
-    isAsc
-  } = sort;
+  const { sortBy, isAsc } = sort;
 
   const [alert, setAlert] = useState({
-    opened: false, 
-    text: ''
+    opened: false,
+    text: "",
   });
   const { opened, text } = alert;
 
   useEffect(async () => {
-    await axios.get('http://localhost:8000/getAllTableData').then(result => {
-      setRows(result.data);
-      setInitial([...result.data]);
-    }).catch(error => {
-      setAlert({
-        opened: true,
-        text: error.message
+    await axios
+      .get("http://localhost:8000/getAllTableData")
+      .then((result) => {
+        setRows(result.data);
+        setInitial([...result.data]);
       })
-    });
+      .catch((error) => {
+        setAlert({
+          opened: true,
+          text: error.message,
+        });
+      });
   }, []);
+
+  const sortFunction = (arr, value, asc) => {
+    const key = value === "patient" ? "patientName" : "doctorName";
+
+    arr.sort((p, n) => (p[key].toLowerCase() > n[key].toLowerCase() ? 1 : -1));
+    asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+  };
 
   const sortData = (isSort, by, asc, rows) => {
     setSort({
       ...sort,
-      isSort
+      isSort,
     });
 
     const arr = rows;
 
-    switch(by) {
-      case('patient'):
-        arr.sort((p, n) => 
-          p.patientName.toLowerCase() > n.patientName.toLowerCase() ? 1 : -1);
-        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
-        break;
+    if (by !== "date") {
+      sortFunction(arr, by, asc);
+    } else {
+      arr.sort((p, n) => {
+        const c = new Date(p.date);
+        const d = new Date(n.date);
 
-      case('doctor'):
-        arr.sort((p, n) => 
-          p.doctorName > n.doctorName ? 1 : -1);
-        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
-        break;
-
-      default:
-        arr.sort((p,n) => {
-          const c = new Date(p.date);
-          const d = new Date(n.date);
-          
-          return c - d;
-        });
-        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+        return c - d;
+      });
+      asc ? setRows([...arr]) : setRows([...arr.reverse()]);
     }
-  }
+  };
 
   const sorting = (
     sortValues,
-    sortBy, 
-    sort, 
-    isAsc, 
-    sortData, 
-    initial, 
+    sortBy,
+    sort,
+    isAsc,
+    sortData,
+    initial,
     rows
   ) => {
-    switch(sortBy) {
+    switch (sortBy) {
       case sortValues[1]:
-        sortData(true, 'patient', isAsc, rows);
+        sortData(true, "patient", isAsc, rows);
         break;
 
       case sortValues[0]:
         setSort({
           ...sort,
-          isSort: false
+          isSort: false,
         });
         setRows([...initial]);
         break;
 
       case sortValues[2]:
-        sortData(true, 'doctor', isAsc, rows);
+        sortData(true, "doctor", isAsc, rows);
         break;
 
       case sortValues[3]:
-        sortData(true, 'date', isAsc, rows);
+        sortData(true, "date", isAsc, rows);
         break;
     }
-  }
-  
+  };
+
   useEffect(() => {
-    sorting(
-      sortValues, 
-      sortBy, 
-      sort, 
-      isAsc, 
-      sortData, 
-      initial, 
-      rows
-    );
+    sorting(sortValues, sortBy, sort, isAsc, sortData, initial, rows);
   }, [isAsc, initial, sortBy]);
 
   const handleAscending = (value) => {
-    let flag = value === directionValues[1] ? false : true;
-    
+    const flag = value !== directionValues[1];
+
     setSort({
       ...sort,
-      isAsc: flag
+      isAsc: flag,
     });
-  }
+  };
 
   return (
     <>
-      <Header 
-        text="Приемы"
-        hasButton={true}
-      />
+      <Header text="Приемы" hasButton={true} />
       <MainPageInputs
         sortValues={sortValues}
         sortData={sortData}
@@ -151,34 +133,33 @@ const MainPage = () => {
         rows={rows}
       />
       <div className="sorting">
-      <div className="sort-wrapper">
-        <label>
-          Сортировать:
-        </label>
-        <select
-          onChange={(e) => setSort({
-            ...sort, 
-            sortBy: e.currentTarget.value
+        <div className="sort-wrapper">
+          <label>Сортировать:</label>
+          <select
+            onChange={(e) =>
+              setSort({
+                ...sort,
+                sortBy: e.currentTarget.value,
+              })
             }
-          )}
-        >
-          {sortValues.map(elem => <option>{elem}</option>)}
-        </select>
-      </div>
-        {sort.isSort && 
+          >
+            {sortValues.map((elem) => (
+              <option>{elem}</option>
+            ))}
+          </select>
+        </div>
+        {sort.isSort && (
           <div className="sort-wrapper">
-            <label>
-              Направление:
-            </label>
-            <select
-              onChange={(e) => handleAscending(e.currentTarget.value)}
-            >
-              {directionValues.map(elem => <option>{elem}</option>)}
+            <label>Направление:</label>
+            <select onChange={(e) => handleAscending(e.currentTarget.value)}>
+              {directionValues.map((elem) => (
+                <option>{elem}</option>
+              ))}
             </select>
           </div>
-        }
+        )}
       </div>
-      <MainTable 
+      <MainTable
         setRows={setRows}
         sortData={sortData}
         sortValues={sortValues}
@@ -187,13 +168,9 @@ const MainPage = () => {
         sort={sort}
         rows={rows}
       />
-      <AlertBox
-        setAlert={setAlert}
-        opened={opened}
-        text={text}
-      />
+      <AlertBox setAlert={setAlert} opened={opened} text={text} />
     </>
-  )
-}
+  );
+};
 
 export default MainPage;

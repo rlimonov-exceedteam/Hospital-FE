@@ -47,8 +47,7 @@ const MainPage = () => {
       });
   }, []);
 
-  const sortFunction = (arr, value, asc) => {
-    const key = value === "patient" ? "patientName" : "doctorName";
+  const sortFunction = (arr, key, asc) => {
 
     arr.sort((p, n) => (p[key].toLowerCase() > n[key].toLowerCase() ? 1 : -1));
     asc ? setRows([...arr]) : setRows([...arr.reverse()]);
@@ -86,7 +85,7 @@ const MainPage = () => {
   ) => {
     switch (sortBy) {
       case sortValues[1]:
-        sortData(true, "patient", isAsc, rows);
+        sortData(true, "patientName", isAsc, rows);
         break;
 
       case sortValues[0]:
@@ -98,7 +97,7 @@ const MainPage = () => {
         break;
 
       case sortValues[2]:
-        sortData(true, "doctor", isAsc, rows);
+        sortData(true, "doctorName", isAsc, rows);
         break;
 
       case sortValues[3]:

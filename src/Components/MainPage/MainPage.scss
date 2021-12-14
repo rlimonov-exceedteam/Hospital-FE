@@ -1,5 +1,6 @@
 .sorting {
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
   flex-wrap: wrap;
 
@@ -70,6 +71,7 @@
 .filter-wrapper {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .filter {
@@ -143,5 +145,30 @@
     svg:hover, button:hover {
       cursor: pointer;
     }
+  }
+}
+
+.create-data {
+  display: block;
+  display: flex;
+  justify-content: center;
+  margin: 10px 0px;
+  width: 100%;
+  background: #C5E9FF;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.25);
+    
+  button {
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 28px;
+    height: 70px;
+    width: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+    background-color: white;
+    margin: 14px;
+  }
+  button:hover {
+    cursor: pointer;
   }
 }

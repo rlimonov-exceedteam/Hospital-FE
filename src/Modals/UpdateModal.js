@@ -109,8 +109,8 @@ const UpdateModal = ({
             value={modalDoctor}
             onChange={(e) => setModalDoctor(e.currentTarget.value)}
           >
-            {doctors.map((elem) => (
-              <option>{elem}</option>
+            {doctors.map((elem, i) => (
+              <option key={i}>{elem}</option>
             ))}
           </select>
         </div>

@@ -17,7 +17,7 @@ const SortSection = ({ handleSorting }) => {
       <select
         onChange={(e) => handleSorting(e.currentTarget.value)}
       >
-        {sortValues.map(elem => <option>{elem}</option>)}
+        {sortValues.map((elem, i) => <option key={i}>{elem}</option>)}
       </select>
     </div>
   )

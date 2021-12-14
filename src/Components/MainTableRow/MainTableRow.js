@@ -51,6 +51,9 @@ const MainTableRow = ({
       </td>
       {modalOpened && (
         <UpdateModal
+          style={{
+            overflow: 'hidden'
+          }}
           setWithoutFilter={setWithoutFilter}
           withoutFilter={withoutFilter}
           modalOpened={modalOpened}

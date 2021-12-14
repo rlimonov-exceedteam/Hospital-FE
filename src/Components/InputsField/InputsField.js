@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom';
 import axios from 'axios';
 import './InputsField.scss';
 
-const InputsField = ({ isRegistration }) => {
+const InputsField = ({ isRegistration, setIsAuth }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [repeatedPassword, setRepeatedPassword] = useState('');
@@ -20,7 +20,6 @@ const InputsField = ({ isRegistration }) => {
 
     if (login) {
       if (!regexLogin.test(login)) {
-        setLogin('');
         setAlert({
           text: 'Логин должен содержать только латинские символы и цифры и быть не короче 6 символов.',
           opened: true
@@ -55,6 +54,7 @@ const InputsField = ({ isRegistration }) => {
     }
 
     if (password !== repeatedPassword) {
+      setRepeatedPassword('');
       setAlert({
         text: 'Пароли не совпадают.',
         opened: true
@@ -67,7 +67,9 @@ const InputsField = ({ isRegistration }) => {
       password
     }).then(result => {
       if (result.statusText === 'OK') {
-        setLogin(result.data.login);
+        setIsAuth(true);
+        localStorage.setItem('token', result.data.token);
+        localStorage.setItem('login', result.data.login);
         history.push('/mainPage');
       } else {
         setAlert({
@@ -105,7 +107,9 @@ const InputsField = ({ isRegistration }) => {
       password
     }).then(result => {
       if (result.statusText === 'OK') {
+        setIsAuth(true);
         localStorage.setItem('token', JSON.stringify(result.data.token));
+        localStorage.setItem('login', result.data.login);
         history.push('/mainPage');
       } 
     }).catch(e => {

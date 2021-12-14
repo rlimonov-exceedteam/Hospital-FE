@@ -11,8 +11,8 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    max-width: 1200px;
-    width: 90%;
+    max-width: 1400px;
+    width: 95%;
 
     @media screen and (max-width: 990px) {
       width: 95%;
@@ -79,7 +79,7 @@
 
   .buttons {
     height: 120px;
-    width: 240px;
+    width: fit-content;
     display: flex;
     justify-content: center;
 

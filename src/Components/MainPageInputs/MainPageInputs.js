@@ -49,11 +49,11 @@ const MainPageInputs = ({
       complaints && 
       date
     ) {
-      const login = JSON.parse(localStorage.getItem('login'))
+      const token = JSON.parse(localStorage.getItem('token'));
 
       await axios
         .post("http://localhost:8000/addTableData", {
-          login,
+          userId: token,
           patientName,
           doctorName,
           complaints,

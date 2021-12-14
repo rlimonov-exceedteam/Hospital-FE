@@ -9,7 +9,6 @@ const MainTable = ({
   sorting,
   initial,
   setRows,
-  isAsc,
   sort,
   rows
 }) => {
@@ -38,7 +37,6 @@ const MainTable = ({
               sorting={sorting}
               initial={initial}
               setRows={setRows}
-              isAsc={isAsc}
               sort={sort}
               rows={rows}
               row={elem}

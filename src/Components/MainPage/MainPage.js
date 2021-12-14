@@ -48,10 +48,11 @@ const MainPage = ({ setIsAuth }) => {
   const [openedInputs, setOpenedInputs] = useState(true);
 
   useEffect(() => {
-    const login = JSON.parse(localStorage.getItem('login'));
+    const token = JSON.parse(localStorage.getItem('token'));
+
     const getData = async () => {
       await axios
-      .get(`http://localhost:8000/getAllTableData?login=${login}`)
+      .get(`http://localhost:8000/getAllTableData?login=${token}`)
       .then((result) => {
         setRows(result.data);
         setInitial([...result.data]);
@@ -75,37 +76,36 @@ const MainPage = ({ setIsAuth }) => {
     setWithoutFilter([...rows]);
   };
 
-  const sortData = (isSort, by, asc, mainArray) => {
-    setSort({
-      ...sort,
-      isSort,
-    });
-
-    const arr = mainArray;
-
-    if (by !== "date") {
-      sortFunction(arr, by, asc);
-    } else {
-      arr.sort((p, n) => {
-        const c = new Date(p.date);
-        const d = new Date(n.date);
-
-        return c - d;
-      });
-      asc ? setRows([...arr]) : setRows([...arr.reverse()]);
-      setWithoutFilter([...mainArray]);
-    }
-  };
-
   const sorting = (
     sortValues,
     sortBy,
     sort,
     isAsc,
-    sortData,
     initial,
     rows
   ) => {
+    const sortData = (isSort, by, asc, mainArray) => {
+      setSort({
+        ...sort,
+        isSort,
+      });
+  
+      const arr = mainArray;
+  
+      if (by !== "date") {
+        sortFunction(arr, by, asc);
+      } else {
+        arr.sort((p, n) => {
+          const c = new Date(p.date);
+          const d = new Date(n.date);
+  
+          return c - d;
+        });
+        asc ? setRows([...arr]) : setRows([...arr.reverse()]);
+        setWithoutFilter([...mainArray]);
+      }
+    };
+
     switch (sortBy) {
       case sortValues[1]:
         sortData(true, "patientName", isAsc, rows);
@@ -160,7 +160,7 @@ const MainPage = ({ setIsAuth }) => {
   }
 
   useEffect(() => {
-    sorting(sortValues, sortBy, sort, isAsc, sortData, initial, rows);
+    sorting(sortValues, sortBy, sort, isAsc, initial, rows);
   }, [isAsc, initial, sortBy]);
 
   const handleAscending = (value) => {
@@ -188,7 +188,6 @@ const MainPage = ({ setIsAuth }) => {
         setOpenedInputs={setOpenedInputs}
         openedInputs={openedInputs}
         sortValues={sortValues}
-        sortData={sortData}
         setRows={setRows}
         sorting={sorting}
         initial={initial}
@@ -283,7 +282,6 @@ const MainPage = ({ setIsAuth }) => {
         setWithoutFilter={setWithoutFilter}
         withoutFilter={withoutFilter}
         sortValues={sortValues}
-        sortData={sortData}
         setRows={setRows}
         sorting={sorting}
         initial={initial}

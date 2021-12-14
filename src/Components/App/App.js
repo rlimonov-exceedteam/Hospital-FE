@@ -32,9 +32,9 @@ const App = () => {
                 setIsAuth={setIsAuth}
               />
             </Route>
-          : <Redirect path to="/signInPage"></Redirect>
+          : <Redirect path to="/signInPage" />
         }
-      <Redirect from='/' to='/signInPage'></Redirect>
+      <Redirect from='/' to='/signInPage' />
       </Switch>
     </div>
   );

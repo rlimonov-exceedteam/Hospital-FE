@@ -11,7 +11,6 @@ const UpdateModal = ({
   toggleModal,
   sortValues,
   setRows,
-  sortData,
   sorting,
   initial,
   sort,
@@ -40,12 +39,15 @@ const UpdateModal = ({
   const doctors = ["Штейн П.И.", "Осокина М.А.", "Путин В.В."];
 
   const update = async () => {
+    const token = JSON.parse(localStorage.getItem('token'));
+    
     await axios
       .patch("http://localhost:8000/updateTableData", {
         patientName: modalPatient,
         doctorName: modalDoctor,
         date: modalDate,
         complaints: modalComplaints,
+        userId: token,
         _id,
       })
       .then((result) => {
@@ -69,8 +71,7 @@ const UpdateModal = ({
           sortValues,
           sortBy, 
           sort, 
-          isAsc, 
-          sortData, 
+          isAsc,  
           initial, 
           rows
         );

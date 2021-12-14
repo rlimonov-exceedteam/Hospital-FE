@@ -67,9 +67,10 @@ const InputsField = ({ isRegistration, setIsAuth }) => {
       password
     }).then(result => {
       if (result.statusText === 'OK') {
+        const { data } = result;
         setIsAuth(true);
-        localStorage.setItem('token', result.data.token);
-        localStorage.setItem('login', result.data.login);
+        localStorage.setItem('token', JSON.stringify(data.token));
+        localStorage.setItem('login', JSON.stringify(data.login));
         history.push('/mainPage');
       } else {
         setAlert({
@@ -107,9 +108,11 @@ const InputsField = ({ isRegistration, setIsAuth }) => {
       password
     }).then(result => {
       if (result.statusText === 'OK') {
+        const { data } = result;
+
         setIsAuth(true);
-        localStorage.setItem('token', JSON.stringify(result.data.token));
-        localStorage.setItem('login', result.data.login);
+        localStorage.setItem('token', JSON.stringify(data.token));
+        localStorage.setItem('login', JSON.stringify(data.login));
         history.push('/mainPage');
       } 
     }).catch(e => {

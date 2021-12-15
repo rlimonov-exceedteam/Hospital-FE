@@ -39,7 +39,7 @@ const UpdateModal = ({
   const doctors = ["Штейн П.И.", "Осокина М.А.", "Путин В.В."];
 
   const update = async () => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = localStorage.getItem('token');
     
     await axios
       .patch("http://localhost:8000/updateTableData", {
@@ -47,9 +47,13 @@ const UpdateModal = ({
         doctorName: modalDoctor,
         date: modalDate,
         complaints: modalComplaints,
-        userId: token,
         _id,
-      })
+        },
+        {
+          headers: {
+            token
+          }
+        })
       .then((result) => {
         const response = result.data;
 

@@ -20,7 +20,13 @@ const DeleteModal = ({
   const { opened, text } = alert;
 
   const deleteData = async () => {
-    await axios.delete(`http://localhost:8000/deleteTableData?_id=${_id}`).then(() => {
+    const token = localStorage.getItem('token');
+
+    await axios.delete(`http://localhost:8000/deleteTableData?_id=${_id}`, {
+      headers: {
+        token,
+      }
+    }).then(() => {
       rows = rows.filter(elem => elem._id !== _id);
       setRows([...rows]);
 

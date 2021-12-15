@@ -5,8 +5,8 @@ import MainPage from '../MainPage/MainPage';
 import './App.scss';
 
 const App = () => {
-  const token = JSON.parse(localStorage.getItem('token'));
-  const [isAuth, setIsAuth] = useState(!!token);
+
+  const [isAuth, setIsAuth] = useState(true);
 
   return (
     <div className="App">

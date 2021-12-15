@@ -48,12 +48,17 @@ const MainPage = ({ setIsAuth }) => {
   const [openedInputs, setOpenedInputs] = useState(true);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem('token'));
+    const token = localStorage.getItem('token');
 
     const getData = async () => {
       await axios
-      .get(`http://localhost:8000/getAllTableData?login=${token}`)
+      .get(`http://localhost:8000/getAllTableData`, {
+        headers: {
+          token,
+        }
+      })
       .then((result) => {
+        console.log(result)
         setRows(result.data);
         setInitial([...result.data]);
         setWithoutFilter([...result.data]);
@@ -63,6 +68,8 @@ const MainPage = ({ setIsAuth }) => {
           opened: true,
           text: error.message,
         });
+        setIsAuth(false);
+        localStorage.clear();
       });
     }
     

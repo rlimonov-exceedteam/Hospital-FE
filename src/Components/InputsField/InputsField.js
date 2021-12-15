@@ -68,9 +68,9 @@ const InputsField = ({ isRegistration, setIsAuth }) => {
     }).then(result => {
       if (result.statusText === 'OK') {
         const { data } = result;
+        console.log(data)
         setIsAuth(true);
-        localStorage.setItem('token', JSON.stringify(data.token));
-        localStorage.setItem('login', JSON.stringify(data.login));
+        localStorage.setItem('token', data.token);
         history.push('/mainPage');
       } else {
         setAlert({
@@ -105,14 +105,12 @@ const InputsField = ({ isRegistration, setIsAuth }) => {
 
     await axios.post('http://localhost:8000/authorise', {
       login,
-      password
+      password,
     }).then(result => {
       if (result.statusText === 'OK') {
         const { data } = result;
-
         setIsAuth(true);
-        localStorage.setItem('token', JSON.stringify(data.token));
-        localStorage.setItem('login', JSON.stringify(data.login));
+        localStorage.setItem('token', data.token);
         history.push('/mainPage');
       } 
     }).catch(e => {

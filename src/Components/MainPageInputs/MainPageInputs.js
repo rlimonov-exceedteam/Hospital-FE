@@ -49,15 +49,19 @@ const MainPageInputs = ({
       complaints && 
       date
     ) {
-      const token = JSON.parse(localStorage.getItem('token'));
+      const token = localStorage.getItem('token');
 
       await axios
         .post("http://localhost:8000/addTableData", {
-          userId: token,
           patientName,
           doctorName,
           complaints,
           date,
+        },
+        {
+          headers: {
+            token
+          }
         })
         .then((result) => {
           let array = [...rows];

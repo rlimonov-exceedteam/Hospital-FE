@@ -68,7 +68,6 @@ const InputsField = ({ isRegistration, setIsAuth }) => {
     }).then(result => {
       if (result.statusText === 'OK') {
         const { data } = result;
-        console.log(data)
         setIsAuth(true);
         localStorage.setItem('token', data.token);
         history.push('/mainPage');

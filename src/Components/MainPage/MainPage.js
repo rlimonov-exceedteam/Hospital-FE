@@ -58,7 +58,6 @@ const MainPage = ({ setIsAuth }) => {
         }
       })
       .then((result) => {
-        console.log(result)
         setRows(result.data);
         setInitial([...result.data]);
         setWithoutFilter([...result.data]);

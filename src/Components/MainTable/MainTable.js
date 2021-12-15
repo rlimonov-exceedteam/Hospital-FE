@@ -9,7 +9,6 @@ const MainTable = ({
   sorting,
   initial,
   setRows,
-  isAsc,
   sort,
   rows
 }) => {
@@ -23,25 +22,29 @@ const MainTable = ({
 
   return (
     <div className="tableWrapper">
-      <table cellspacing="0" border="0" cellpadding="0">
-        <tr className="tableHead">
-          {tableHeads.map(elem => <th>{elem}</th>)}
-        </tr>
-        {rows.map((elem) => <MainTableRow
-            setWithoutFilter={setWithoutFilter}
-            withoutFilter={withoutFilter}
-            sortValues={sortValues}
-            sortData={sortData}
-            sorting={sorting}
-            initial={initial}
-            setRows={setRows}
-            isAsc={isAsc}
-            sort={sort}
-            rows={rows}
-            row={elem}
-          />
-        )}
-      </table>
+        <table cellSpacing="0" border="0" cellPadding="0">
+          <thead>
+            <tr className="tableHead">
+              {tableHeads.map((elem, i) => <th key={i}>{elem}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((elem, i) => <MainTableRow
+                setWithoutFilter={setWithoutFilter}
+                withoutFilter={withoutFilter}
+                sortValues={sortValues}
+                sortData={sortData}
+                sorting={sorting}
+                initial={initial}
+                setRows={setRows}
+                sort={sort}
+                rows={rows}
+                row={elem}
+                key={i}
+              />
+            )}
+          </tbody>
+        </table>
     </div>
   )
 }

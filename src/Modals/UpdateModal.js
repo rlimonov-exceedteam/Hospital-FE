@@ -11,7 +11,6 @@ const UpdateModal = ({
   toggleModal,
   sortValues,
   setRows,
-  sortData,
   sorting,
   initial,
   sort,
@@ -40,6 +39,8 @@ const UpdateModal = ({
   const doctors = ["Штейн П.И.", "Осокина М.А.", "Путин В.В."];
 
   const update = async () => {
+    const token = localStorage.getItem('token');
+    
     await axios
       .patch("http://localhost:8000/updateTableData", {
         patientName: modalPatient,
@@ -47,7 +48,12 @@ const UpdateModal = ({
         date: modalDate,
         complaints: modalComplaints,
         _id,
-      })
+        },
+        {
+          headers: {
+            token
+          }
+        })
       .then((result) => {
         const response = result.data;
 
@@ -69,8 +75,7 @@ const UpdateModal = ({
           sortValues,
           sortBy, 
           sort, 
-          isAsc, 
-          sortData, 
+          isAsc,  
           initial, 
           rows
         );
@@ -109,8 +114,8 @@ const UpdateModal = ({
             value={modalDoctor}
             onChange={(e) => setModalDoctor(e.currentTarget.value)}
           >
-            {doctors.map((elem) => (
-              <option>{elem}</option>
+            {doctors.map((elem, i) => (
+              <option key={i}>{elem}</option>
             ))}
           </select>
         </div>

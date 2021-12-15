@@ -1,12 +1,12 @@
 .tableWrapper {
-  height: calc(100% - 267px);
-  padding: 20px;
-  min-height: 100vh;
-  overflow-x: scroll;
+  height: fit-content;
+  margin: 20px;
+  overflow: scroll;
 
   table {
     width: 100%;
     height: fit-content;
+    overflow: scroll;
     border: 1px solid rgba(0, 0, 0, 0.2);
 
     .tableHead {
@@ -14,6 +14,7 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
       font-size: 18px;
       line-height: 21px;
+      
 
       th {
         font-weight: 300;

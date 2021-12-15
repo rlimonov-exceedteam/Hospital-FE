@@ -5,6 +5,8 @@ import "./MainPageInputs.scss";
 
 const MainPageInputs = ({ 
   setWithoutFilter,
+  setOpenedInputs,
+  openedInputs,
   withoutFilter,
   sortValues,
   sortData,
@@ -47,12 +49,19 @@ const MainPageInputs = ({
       complaints && 
       date
     ) {
+      const token = localStorage.getItem('token');
+
       await axios
         .post("http://localhost:8000/addTableData", {
           patientName,
           doctorName,
           complaints,
           date,
+        },
+        {
+          headers: {
+            token
+          }
         })
         .then((result) => {
           let array = [...rows];
@@ -71,6 +80,11 @@ const MainPageInputs = ({
             initial, 
             array
           );
+
+          setPatientName("");
+          setDoctorName("Штейн П.И.");
+          setComplaints("");
+          setDate("");
         })
         .catch((error) => {
           setAlert({
@@ -85,14 +99,10 @@ const MainPageInputs = ({
       });
     }
 
-    setPatientName("");
-    setDoctorName("Штейн П.И.");
-    setComplaints("");
-    setDate("");
   };
 
   return (
-    <div className="MainPageInputs">
+    <div className="MainPageInputs" style={{display: openedInputs ? 'flex' : 'none'}}>
       <div className="wrapper">
         <div className="inputDiv">
           <p>Имя:</p>
@@ -107,8 +117,8 @@ const MainPageInputs = ({
             value={doctorName}
             onChange={(e) => setDoctorName(e.currentTarget.value)}
           >
-            {doctors.map((elem) => (
-              <option>{elem}</option>
+            {doctors.map((elem, i) => (
+              <option key={i}>{elem}</option>
             ))}
           </select>
         </div>
@@ -130,6 +140,11 @@ const MainPageInputs = ({
         <div className="buttons">
             <button onClick={() => addRow()}>
               Добавить
+            </button>
+        </div>
+        <div className="buttons" id="close">
+            <button onClick={() => setOpenedInputs(false)}>
+              Закрыть
             </button>
         </div>
       </div>

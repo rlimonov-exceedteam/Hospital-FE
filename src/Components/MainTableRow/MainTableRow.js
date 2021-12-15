@@ -9,11 +9,9 @@ const MainTableRow = ({
   setWithoutFilter,
   withoutFilter,
   sortValues,
-  sortData,
   sorting,
   initial,
   setRows, 
-  isAsc, 
   sort, 
   rows, 
   row 
@@ -51,16 +49,17 @@ const MainTableRow = ({
       </td>
       {modalOpened && (
         <UpdateModal
+          style={{
+            overflow: 'hidden'
+          }}
           setWithoutFilter={setWithoutFilter}
           withoutFilter={withoutFilter}
           modalOpened={modalOpened}
           toggleModal={toggleModal}
           sortValues={sortValues}
-          sortData={sortData}
           sorting={sorting}
           initial={initial}
           setRows={setRows}
-          isAsc={isAsc}
           sort={sort}
           rows={rows}
           row={row}
